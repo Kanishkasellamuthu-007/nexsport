@@ -289,7 +289,7 @@
         if (window.supabaseClient) {
           await window.supabaseClient.auth.signOut();
         }
-        window.location.href = "login.html";
+        window.location.href = "index.html";
       });
     }
   }
@@ -395,4 +395,3 @@
     init();
   }
 })();
-

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NexSport | Find Players. Build Teams. Play Fair.</title>
+  <meta name="description" content="Discover nearby players, create matches in seconds and get balanced teams with seed and dynamic Elo ratings." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NexSport | Find Players. Build Teams. Play Fair." />
+  <meta property="og:description" content="Discover nearby players, create matches in seconds and get balanced teams with seed and dynamic Elo ratings." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body data-page="landing">
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="dashboard.html">
+        <img class="brand-mark brand-logo" src="/__l5e/assets-v1/1cb031ba-f09c-4ef7-8a7b-43db7ebd17af/nexsport-logo.jpg" alt="NexSport" />
+        <span class="brand-name">Nex<span>Sport</span></span>
+      </a>
+      <nav class="nav" aria-label="Sections">
+          <a href="dashboard.html"><span class="ico">◳</span>Dashboard</a>
+        <div class="nav-group">
+          <button type="button" class="nav-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="navg-play"><span class="ico">✦</span>Play<span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu" id="navg-play">
+            <a href="find-match.html"><span class="ico">✦</span>Find Match</a>
+            <a href="create-room.html"><span class="ico">＋</span>Create Room</a>
+            <a href="room.html"><span class="ico">◈</span>Match Room</a>
+            <a href="matches.html"><span class="ico">⇄</span>My Matches</a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button type="button" class="nav-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="navg-discover"><span class="ico">◎</span>Discover<span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu" id="navg-discover">
+            <a href="courts.html"><span class="ico">◎</span>Nearby Courts</a>
+            <a href="players.html"><span class="ico">⚇</span>Players</a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button type="button" class="nav-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="navg-progress"><span class="ico">↗</span>Progress<span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu" id="navg-progress">
+            <a href="performance.html"><span class="ico">↗</span>Performance</a>
+            <a href="leaderboard.html"><span class="ico">⚑</span>Leaderboard</a>
+            <a href="assessment.html"><span class="ico">☑</span>Assessment</a>
+            <a href="verify.html"><span class="ico">Ⓐ</span>Skill Verification</a>
+          </div>
+        </div>
+      </nav>
+      <div class="nav-utils">
+        <a class="icon-btn nav-util-btn" href="notifications.html" aria-label="Notifications">&#9873;</a>
+        <a class="btn btn-primary btn-sm signup-link" href="register.html"><span>Sign up</span></a>
+      </div>
+      <div class="sidebar-foot">
+        <div class="nav-group account-group">
+          <button type="button" class="account-trigger" id="account-btn" aria-expanded="false" aria-haspopup="true" aria-controls="account-menu"><span class="avatar avatar-sm" aria-hidden="true">NS</span><span class="who"><strong>Athlete</strong>Account</span><span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu account-menu" id="account-menu">
+            <div class="nav-menu-label">Account</div>
+            <a href="profile.html"><span class="ico">◑</span>My Profile</a>
+            <a href="settings.html"><span class="ico">⚙</span>Settings</a>
+            <a href="assessment.html"><span class="ico">☑</span>Assessment</a>
+            <a href="verify.html"><span class="ico">Ⓐ</span>Skill Verification</a>
+            <a href="notifications.html"><span class="ico">◉</span>Notifications</a>
+            <button type="button" class="btn btn-ghost btn-sm nav-signout" id="sign-out">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation">&#9776;</button>
+        <div class="spacer"></div>
+        <a class="avatar" href="profile.html" aria-label="Profile">NS</a>
+      </header>
+      <div class="ticker" aria-hidden="true">
+        <span class="ticker-label">Live</span>
+        <div class="ticker-view"><div class="ticker-track"><span>Skill verification keeps Elo honest</span><i></i><span>Balanced team engine · every room</span><i></i><span>Courts and players update live</span><i></i><span>Elo recalculated after each result</span><i></i><span>Performance trends per sport</span><i></i><span>Fair play score on every profile</span><i></i><span>Skill verification keeps Elo honest</span><i></i><span>Balanced team engine · every room</span><i></i><span>Courts and players update live</span><i></i><span>Elo recalculated after each result</span><i></i><span>Performance trends per sport</span><i></i><span>Fair play score on every profile</span><i></i></div></div>
+      </div>
+      <main class="content landing">
+        <section class="hero-split">
+          <div class="hero-copy">
+            <span class="pill-badge">&#127942; AI-Assisted Community Sports Platform</span>
+            <h1>Find Players.<br />Build Teams.<br /><em>Play Fair.</em></h1>
+            <p>NexSport helps sports enthusiasts discover nearby players, create matches, join local games and enjoy balanced team formation with dynamic Elo ratings.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="create-room.html">Create Match</a>
+              <a class="btn btn-lime" href="find-match.html">Find Match</a>
+            </div>
+            <ul class="hero-notes">
+              <li>No fake data &mdash; every panel fills up from your own play.</li>
+              <li>Seed Elo from a one-time assessment, then dynamic after each result.</li>
+            </ul>
+          </div>
+          <aside class="hero-card">
+            <img class="hero-card-mark" src="/__l5e/assets-v1/1cb031ba-f09c-4ef7-8a7b-43db7ebd17af/nexsport-logo.jpg" alt="NexSport logo" />
+            <h2>NexSport</h2>
+            <p>Play your favourite sport with nearby players, create matches instantly and enjoy fair gameplay.</p>
+            <div class="hero-card-grid">
+              <div><span class="k">Elo</span><span class="v">Dynamic</span></div>
+              <div><span class="k">Teams</span><span class="v">Balanced</span></div>
+              <div><span class="k">Courts</span><span class="v">Nearby</span></div>
+            </div>
+            <a class="btn btn-ghost btn-sm" href="register.html">Create your account</a>
+          </aside>
+        </section>
+
+        <section class="landing-section">
+          <h2 class="section-title">Why Choose NexSport?</h2>
+          <div class="grid g4">
+            <article class="card feature-card">
+              <div class="ico">&#128205;</div>
+              <h3>Nearby Players</h3>
+              <p>Find players around your location using GPS-based discovery.</p>
+            </article>
+            <article class="card feature-card">
+              <div class="ico">&#9917;</div>
+              <h3>Create Matches</h3>
+              <p>Create football, cricket, badminton and other sports matches in seconds.</p>
+            </article>
+            <article class="card feature-card">
+              <div class="ico">&#127942;</div>
+              <h3>Fair Team Formation</h3>
+              <p>Balanced teams using Seed Elo and Dynamic Elo algorithms.</p>
+            </article>
+            <article class="card feature-card">
+              <div class="ico">&#128202;</div>
+              <h3>Performance Insights</h3>
+              <p>Track your wins, ratings, match history and personal growth.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="landing-cta card">
+          <div>
+            <h3>Ready to play a balanced match?</h3>
+            <p class="hint">Take the one-time assessment, get your seed Elo and open your first match room.</p>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="register.html">Sign up free</a>
+            <a class="btn btn-ghost" href="/">Sign in</a>
+          </div>
+        </section>
+
+        <footer class="landing-foot">
+          <p>&copy; 2026 NexSport &bull; Find Players &bull; Build Teams &bull; Play Fair</p>
+        </footer>
+      </main>
+    </div>
+  </div>
+  <div class="toast-wrap"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+  <script src="/assets/nexsport-integration.js"></script>
+</body>
+</html>

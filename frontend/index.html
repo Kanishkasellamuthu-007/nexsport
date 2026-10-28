@@ -1,247 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NexSport — Find Players, Play Anywhere</title>
-  <meta name="description" content="NexSport connects casual players to nearby sports match lobbies in free public spaces with fair Elo matchmaking and AI coaching." />
-
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap 5 & Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-
-  <!-- NexSport styles -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NexSport | AI Sports Matchmaking &amp; Performance Platform</title>
+  <meta name="description" content="Sign in to NexSport to find AI-matched opponents, book nearby courts and track your sports performance." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NexSport | AI Sports Matchmaking &amp; Performance" />
+  <meta property="og:description" content="Find AI-matched opponents, discover nearby courts and track your performance in one platform." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
 </head>
-<body>
-
-  <!-- Reusable navbar component -->
-  <nav class="navbar navbar-expand-lg navbar-dark site-navbar">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">
-        <span class="fs-4">⚽</span> <span class="brand-gradient">NexSport</span>
+<body data-page="login">
+  <div class="auth">
+    <section class="auth-aside">
+      <a class="brand" href="index.html">
+        <img class="brand-mark brand-logo" src="/__l5e/assets-v1/1cb031ba-f09c-4ef7-8a7b-43db7ebd17af/nexsport-logo.jpg" alt="NexSport" />
+        <span class="brand-name">Nex<span>Sport</span></span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-lg-center">
-          <li class="nav-item"><a class="nav-link active" href="index.html"><i class="bi bi-house-door"></i> Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="find-matches.html"><i class="bi bi-search"></i> Find Matches</a></li>
-          <li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-robot"></i> AI Coach</a></li>
-          <li class="nav-item"><a class="nav-link" href="profile.html"><i class="bi bi-person"></i> My Profile</a></li>
-          <li class="nav-item" id="nav-login"><a class="nav-link btn-login" href="login.html"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-          <li class="nav-item d-none" id="nav-user"><a class="nav-link btn-login" href="dashboard.html"><i class="bi bi-grid-fill"></i> Dashboard</a></li>
-        </ul>
+      <div>
+        <h1>AI matchmaking for athletes who want a real game.</h1>
+        <p class="lede">NexSport pairs you with compatible opponents, finds courts near you and turns every session into measurable progress.</p>
+        <div class="pill-list">
+          <span class="pill">Smart opponent matching</span>
+          <span class="pill">Nearby courts</span>
+          <span class="pill">Performance tracking</span>
+          <span class="pill">Leaderboards</span>
+        </div>
       </div>
-    </div>
-  </nav>
-
-  <!-- Hero section -->
-  <header class="hero d-flex align-items-center">
-    <div class="container text-center text-white py-4 position-relative">
-      <div class="hero-pill">
-        <i class="bi bi-lightning-charge-fill text-warning"></i> Community Sports Matchmaking &amp; AI Tactics
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Skill-based matching</span><i></i>
+          <span>Verified courts</span><i></i>
+          <span>Performance analytics</span><i></i>
+          <span>Fair play ranking</span><i></i>
+          <span>Availability sync</span><i></i>
+          <span>Skill-based matching</span><i></i>
+          <span>Verified courts</span><i></i>
+          <span>Performance analytics</span><i></i>
+          <span>Fair play ranking</span><i></i>
+          <span>Availability sync</span><i></i>
+        </div>
       </div>
-      <h1 class="display-4 fw-bold mb-3">
-        Play Sports. Meet Players. <br>
-        <span class="hero-text-gradient">Any Free Ground.</span>
-      </h1>
-      <p class="lead mb-4">
-        NexSport discovers open pickup match lobbies in public spaces, evaluates your skill with Elo,
-        balances teams automatically with greedy zig-zag, and offers real-time tactical AI coaching.
-      </p>
-      <div class="d-flex flex-wrap justify-content-center gap-3">
-        <a href="find-matches.html" class="btn btn-warning btn-lg px-4 shadow">
-          <i class="bi bi-compass"></i> Find a Match Nearby
-        </a>
-        <a href="create-lobby.html" class="btn btn-glass btn-lg px-4">
-          <i class="bi bi-plus-circle"></i> Create a Lobby
-        </a>
-        <a href="chat.html" class="btn btn-glass btn-lg px-4">
-          <i class="bi bi-chat-dots-fill"></i> Ask AI Coach
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <div class="container">
-    <!-- Metrics strip right below Hero -->
-    <div class="metrics-strip">
-      <div class="row g-3 text-start">
-        <div class="col-6 col-lg-3">
-          <div class="metric-item">
-            <div class="metric-icon-wrap"><i class="bi bi-geo-alt-fill"></i></div>
-            <div>
-              <strong class="d-block text-dark fw-bold">Public Grounds</strong>
-              <small class="text-muted">Haversine GPS discovery</small>
-            </div>
+      <p class="muted">Live NexSport account and match services.</p>
+    </section>
+    <section class="auth-main">
+      <div class="auth-card">
+        <h2>Sign in</h2>
+        <p class="sub">Sign in to your NexSport account.</p>
+        <form id="login-form" novalidate>
+          <label class="field">
+            <span>Email</span>
+            <input class="input" type="email" name="email" autocomplete="username" placeholder="you@example.com" required />
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input class="input" type="password" name="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required />
+          </label>
+          <div class="row" style="margin-top:14px">
+            <label class="checkbox"><input type="checkbox" /> Remember me</label>
+            <a class="link" href="forgot-password.html" id="forgot-link">Forgot password?</a>
           </div>
+          <p class="form-error" id="login-error" role="alert"></p>
+          <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+        <div class="demo-hint">
+          New to NexSport? <a class="link" href="register.html">Create an account</a><br />
+          Just looking around? <a class="link" href="landing.html">Explore NexSport</a>
         </div>
-        <div class="col-6 col-lg-3">
-          <div class="metric-item">
-            <div class="metric-icon-wrap"><i class="bi bi-shuffle"></i></div>
-            <div>
-              <strong class="d-block text-dark fw-bold">Fair Teams</strong>
-              <small class="text-muted">Greedy zig-zag split</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="metric-item">
-            <div class="metric-icon-wrap"><i class="bi bi-graph-up-arrow"></i></div>
-            <div>
-              <strong class="d-block text-dark fw-bold">Elo Ratings</strong>
-              <small class="text-muted">Provisional to verified</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-lg-3">
-          <div class="metric-item">
-            <div class="metric-icon-wrap"><i class="bi bi-cpu-fill"></i></div>
-            <div>
-              <strong class="d-block text-dark fw-bold">Open-Source AI</strong>
-              <small class="text-muted">Llama 3.1, Mistral, Phi-3.5</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Feature cards -->
-  <main class="container my-5">
-    <div class="text-center mb-5">
-      <h2 class="h3 fw-bold mb-2">Engineered for Casual &amp; Competitive Athletes</h2>
-      <p class="text-muted max-w-600 mx-auto">Everything you need to turn public parks, community courts, and turfs into balanced, competitive arenas.</p>
-    </div>
-
-    <div class="row g-4">
-      <div class="col-md-4">
-        <div class="card feature-card h-100 p-3">
-          <div class="card-body">
-            <div class="card-icon-badge emerald">
-              <i class="bi bi-pin-map-fill"></i>
-            </div>
-            <h5 class="card-title">Nearby Lobbies</h5>
-            <p class="card-text text-muted">
-              Discover open matches around your city within 1km to 50km using high-precision Haversine coordinates and city filters.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card feature-card h-100 p-3">
-          <div class="card-body">
-            <div class="card-icon-badge amber">
-              <i class="bi bi-bar-chart-line-fill"></i>
-            </div>
-            <h5 class="card-title">Skill Questionnaire &amp; Elo</h5>
-            <p class="card-text text-muted">
-              Get an instant baseline skill rating (800–1500) through our questionnaire, then track progression with post-match Elo adjustments.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card feature-card h-100 p-3">
-          <div class="card-body">
-            <div class="card-icon-badge blue">
-              <i class="bi bi-diagram-3-fill"></i>
-            </div>
-            <h5 class="card-title">Balanced Zig-Zag Teams</h5>
-            <p class="card-text text-muted">
-              Eliminate lopsided games. NexSport's deterministic greedy algorithm splits players into evenly matched Team A vs Team B.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI Coach Banner -->
-    <div class="card bg-dark text-white border-0 mt-5 shadow-lg overflow-hidden position-relative" style="border-radius: 1.25rem; background: linear-gradient(135deg, #072714 0%, #0d3d20 50%, #15803d 100%) !important;">
-      <div class="card-body p-4 p-md-5 d-flex flex-wrap align-items-center justify-content-between gap-4 position-relative">
-        <div style="max-width: 600px;">
-          <div class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1">🤖 GitHub Open-Source AI</div>
-          <h3 class="fw-bold mb-2 text-white">NexSport AI Tactical Coach</h3>
-          <p class="mb-0 text-white-50">
-            Chat with <strong>Meta Llama 3.1 70B</strong>, <strong>Mistral Large</strong>, <strong>Microsoft Phi-3.5</strong>, or <strong>DeepSeek R1</strong> for 5v5 formations, 10-minute dynamic warmups, official pitch rules, and injury prevention.
-          </p>
-        </div>
-        <div class="d-flex flex-column flex-sm-row gap-2">
-          <a href="chat.html" class="btn btn-warning btn-lg fw-bold px-4 py-2">
-            Launch AI Coach &rarr;
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- API status widget -->
-    <section class="text-center mt-5 pt-3">
-      <div class="api-status-pill text-dark" id="api-status-container">
-        <span class="status-dot ok" id="api-status-dot"></span>
-        <span id="api-status" class="fw-semibold">Checking API…</span>
       </div>
     </section>
-  </main>
-
-  <!-- Modern Multi-column Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="row g-4 mb-4">
-        <div class="col-md-5">
-          <h6 class="fs-5 fw-bold text-white mb-2">⚽ NexSport</h6>
-          <p class="text-white-50 small pe-md-4">
-            A sports matchmaking web platform connecting casual athletes to open lobbies in public grounds. Fair teams, Elo skill tracking, and AI tactics.
-          </p>
-          <div class="d-flex gap-2">
-            <span class="badge bg-white-subtle text-white border border-secondary-subtle">⚽ Football</span>
-            <span class="badge bg-white-subtle text-white border border-secondary-subtle">🏀 Basketball</span>
-            <span class="badge bg-white-subtle text-white border border-secondary-subtle">🏏 Cricket</span>
-            <span class="badge bg-white-subtle text-white border border-secondary-subtle">🏸 Badminton</span>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <h6>Navigation</h6>
-          <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="find-matches.html">Find Nearby Matches</a></li>
-            <li><a href="create-lobby.html">Create Match Lobby</a></li>
-            <li><a href="chat.html">AI Sports Assistant</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-4">
-          <h6>Player Hub</h6>
-          <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-            <li><a href="dashboard.html">Player Dashboard</a></li>
-            <li><a href="profile.html">Profile &amp; Settings</a></li>
-            <li><a href="questionnaire.html">Skill Questionnaire</a></li>
-            <li><a href="login.html">Login / Register</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="pt-3 border-top border-secondary-subtle d-flex flex-wrap justify-content-between align-items-center text-white-50 small">
-        <p class="mb-0">&copy; 2026 NexSport. Built with Python Flask, Supabase &amp; GitHub Models.</p>
-        <p class="mb-0">Empowering Grassroots Athletics</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap 5 JS bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- NexSport scripts -->
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/chat-widget.js"></script>
+  </div>
+  <div class="toast-wrap"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+  <script src="/assets/nexsport-integration.js"></script>
 </body>
 </html>

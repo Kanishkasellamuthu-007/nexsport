@@ -1,203 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — NexSport</title>
-
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/auth.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard | NexSport</title>
+  <meta name="description" content="Your NexSport dashboard: AI match suggestions, schedule, performance trend and recent activity." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Dashboard | NexSport" />
+  <meta property="og:description" content="Your NexSport dashboard: AI match suggestions, schedule, performance trend and recent activity." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
 </head>
-
-<body class="app-page">
-  <nav class="navbar navbar-expand-lg navbar-dark site-navbar">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">
-        <span class="fs-4">⚽</span> <span class="brand-gradient">NexSport</span>
+<body data-page="dashboard">
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="dashboard.html">
+        <img class="brand-mark brand-logo" src="/__l5e/assets-v1/1cb031ba-f09c-4ef7-8a7b-43db7ebd17af/nexsport-logo.jpg" alt="NexSport" />
+        <span class="brand-name">Nex<span>Sport</span></span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto align-items-lg-center">
-          <li class="nav-item"><a class="nav-link active" href="dashboard.html"><i class="bi bi-grid-fill"></i> Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="find-matches.html"><i class="bi bi-search"></i> Find Matches</a></li>
-          <li class="nav-item"><a class="nav-link" href="create-lobby.html"><i class="bi bi-plus-circle"></i> Create Lobby</a></li>
-          <li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-robot"></i> AI Coach</a></li>
-          <li class="nav-item"><a class="nav-link" href="profile.html"><i class="bi bi-person"></i> My Profile</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" id="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <main class="container my-4">
-    <!-- Welcome Header Banner -->
-    <div class="card border-0 shadow-sm p-4 mb-4 text-white position-relative overflow-hidden" 
-         style="background: linear-gradient(135deg, #072714 0%, #0d3d20 50%, #15803d 100%); border-radius: 1.25rem;">
-      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 position-relative">
-        <div class="d-flex align-items-center gap-3">
-          <div class="user-avatar-circle" id="dashboard-avatar" style="width: 54px; height: 54px; font-size: 1.35rem; background: #a3e635; color: #0a3622;">
-            👤
+      <nav class="nav" aria-label="Sections">
+          <a href="dashboard.html" class="is-active" aria-current="page"><span class="ico">◳</span>Dashboard</a>
+        <div class="nav-group">
+          <button type="button" class="nav-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="navg-play"><span class="ico">✦</span>Play<span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu" id="navg-play">
+            <a href="find-match.html"><span class="ico">✦</span>Find Match</a>
+            <a href="create-room.html"><span class="ico">＋</span>Create Room</a>
+            <a href="room.html"><span class="ico">◈</span>Match Room</a>
+            <a href="matches.html"><span class="ico">⇄</span>My Matches</a>
           </div>
+        </div>
+        <div class="nav-group">
+          <button type="button" class="nav-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="navg-discover"><span class="ico">◎</span>Discover<span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu" id="navg-discover">
+            <a href="courts.html"><span class="ico">◎</span>Nearby Courts</a>
+            <a href="players.html"><span class="ico">⚇</span>Players</a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button type="button" class="nav-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="navg-progress"><span class="ico">↗</span>Progress<span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu" id="navg-progress">
+            <a href="performance.html"><span class="ico">↗</span>Performance</a>
+            <a href="leaderboard.html"><span class="ico">⚑</span>Leaderboard</a>
+            <a href="assessment.html"><span class="ico">☑</span>Assessment</a>
+            <a href="verify.html"><span class="ico">Ⓐ</span>Skill Verification</a>
+          </div>
+        </div>
+      </nav>
+      <div class="nav-utils">
+        <a class="icon-btn nav-util-btn" href="notifications.html" aria-label="Notifications">&#9873;</a>
+        <a class="btn btn-primary btn-sm signup-link" href="register.html"><span>Sign up</span></a>
+      </div>
+      <div class="sidebar-foot">
+        <div class="nav-group account-group">
+          <button type="button" class="account-trigger" id="account-btn" aria-expanded="false" aria-haspopup="true" aria-controls="account-menu"><span class="avatar avatar-sm" aria-hidden="true">AT</span><span class="who"><strong>Athlete</strong></span><span class="caret" aria-hidden="true">▾</span></button>
+          <div class="nav-menu account-menu" id="account-menu">
+            <div class="nav-menu-label">Account</div>
+            <a href="profile.html"><span class="ico">◑</span>My Profile</a>
+            <a href="settings.html"><span class="ico">⚙</span>Settings</a>
+            <a href="assessment.html"><span class="ico">☑</span>Assessment</a>
+            <a href="verify.html"><span class="ico">Ⓐ</span>Skill Verification</a>
+            <a href="notifications.html"><span class="ico">◉</span>Notifications</a>
+            <button type="button" class="btn btn-ghost btn-sm nav-signout" id="sign-out">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn menu-btn" id="menu-btn" aria-label="Open navigation">&#9776;</button>
+        <div class="spacer"></div>
+        <a class="avatar" href="profile.html" aria-label="Profile">DA</a>
+      </header>
+      <div class="ticker" aria-hidden="true">
+        <span class="ticker-label">Live</span>
+        <div class="ticker-view"><div class="ticker-track"><span>Skill verification keeps Elo honest</span><i></i><span>Balanced team engine · every room</span><i></i><span>Courts and players update live</span><i></i><span>Elo recalculated after each result</span><i></i><span>Performance trends per sport</span><i></i><span>Fair play score on every profile</span><i></i><span>Skill verification keeps Elo honest</span><i></i><span>Balanced team engine · every room</span><i></i><span>Courts and players update live</span><i></i><span>Elo recalculated after each result</span><i></i><span>Performance trends per sport</span><i></i><span>Fair play score on every profile</span><i></i></div></div>
+      </div>
+      <main class="content">
+        <div class="page-head">
           <div>
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-              <h1 class="h3 fw-bold mb-0 text-white" id="dashboard-player-name">Welcome Player</h1>
-              <span class="badge bg-white-subtle text-white border border-white-subtle small" id="user-email-badge">Loading…</span>
-            </div>
-            <p class="text-white-50 mb-0 small" id="dashboard-location-sub">NexSport Grassroots Athlete</p>
+            <h1>Dashboard</h1>
+            <p>Your NexSport home. Everything is empty until you play your first match, log a session or connect your data.</p>
           </div>
+          <div class="head-actions"><a class="btn btn-primary btn-sm" href="find-match.html">Find a match</a></div>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
-          <a href="find-matches.html" class="btn btn-warning px-3 py-2 fw-semibold">
-            <i class="bi bi-search"></i> Find Matches
-          </a>
-          <a href="create-lobby.html" class="btn btn-glass px-3 py-2 fw-semibold">
-            <i class="bi bi-plus-circle"></i> Host Lobby
-          </a>
+        <div class="grid g4">
+          <section class="card stat"><div class="k">Elo rating</div><div class="v" data-flow="elo">&ndash;</div><div class="n" data-flow="rank-band">Unranked</div></section>
+          <section class="card stat"><div class="k">Matches played</div><div class="v" data-flow="played">0</div><div class="n">Logged from match results</div></section>
+          <section class="card stat"><div class="k">Win rate</div><div class="v" data-flow="winrate">&ndash;</div><div class="n">Available after your first result</div></section>
+          <section class="card stat"><div class="k">Open room</div><div class="v" style="font-size:18px" data-flow="room-state">No open room</div><div class="n">Create or join a match room</div></section>
         </div>
-      </div>
+        <section class="card">
+          <div class="card-head">
+            <div class="ico">◈</div>
+            <div><h3>Your NexSport workflow</h3><div class="hint">Assessment → verification → seed Elo → match room → balanced teams → result → rating</div></div>
+            <a class="btn btn-primary btn-sm" href="create-room.html">Create match room</a>
+          </div>
+          <ol class="flow-list" id="flow-pipeline"></ol>
+        </section>
+        <div class="grid g4">
+          <section class="card stat"><div class="k">Matches played</div><div class="v">0</div><div class="n">No matches recorded yet</div></section>
+          <section class="card stat"><div class="k">Win rate</div><div class="v">&ndash;</div><div class="n">Available after your first result</div></section>
+          <section class="card stat"><div class="k">Performance score</div><div class="v">&ndash;</div><div class="n">Log a session to generate a score</div></section>
+          <section class="card stat"><div class="k">Ranking</div><div class="v">Unranked</div><div class="n">Play a ranked match to enter</div></section>
+        </div>
+        <div class="grid g-main">
+      <section class="card">
+        <div class="card-head">
+          <div class="ico">✦</div>
+          <div><h3>AI match suggestions</h3><div class="hint">Personalised opponents based on your profile</div></div>
+          
+        </div>
+        <div class="empty">
+          <div class="glyph">✦</div>
+          <h4>No suggestions yet</h4>
+          <p>Complete your athlete profile and pick a sport so the matchmaking engine has something to work with.</p>
+          <div class="actions"><a class="btn btn-primary btn-sm" href="profile.html">Complete profile</a><a class="btn btn-ghost btn-sm" href="find-match.html">Open matchmaking</a></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-head">
+          <div class="ico">◳</div>
+          <div><h3>Upcoming schedule</h3><div class="hint">Confirmed matches and bookings</div></div>
+          
+        </div>
+        <div class="empty">
+          <div class="glyph">◳</div>
+          <h4>Nothing scheduled</h4>
+          <p>Accepted match requests and court bookings will appear here.</p>
+        </div>
+      </section>
+        </div>
+        <div class="grid g-main">
+      <section class="card">
+        <div class="card-head">
+          <div class="ico">↗</div>
+          <div><h3>Performance trend</h3><div class="hint">Last 30 days</div></div>
+          
+        </div>
+        <div class="placeholder"><div><strong>Performance chart</strong>Your trend line appears once at least two sessions are recorded.</div></div>
+      </section>
+      <section class="card">
+        <div class="card-head">
+          <div class="ico">◉</div>
+          <div><h3>Recent activity</h3><div class="hint">Match results, requests and alerts</div></div>
+          
+        </div>
+        <div class="empty">
+          <div class="glyph">◉</div>
+          <h4>No activity yet</h4>
+          <p>Requests, results and system alerts will show up in this feed.</p>
+        </div>
+      </section>
+        </div>
+      </main>
     </div>
-
-    <div id="alert-box"></div>
-
-    <!-- Core 4 Cards Grid -->
-    <div class="row g-4 mb-4">
-      <!-- Ratings Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card stat-card h-100 p-2">
-          <div class="card-body d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div class="card-icon-badge emerald mb-0"><i class="bi bi-award-fill"></i></div>
-              <span class="badge bg-success-subtle text-success border border-success-subtle">Elo Rating</span>
-            </div>
-            <h5 class="card-title mt-2">Skill Rating</h5>
-            <div id="rating-summary-content" class="my-2 flex-grow-1">
-              <div class="d-flex align-items-baseline gap-2">
-                <span class="stat-metric-number" id="rating-number">1200</span>
-                <small class="text-muted" id="rating-sport-name">Baseline</small>
-              </div>
-              <p class="text-muted small mt-1 mb-0" id="rating-subtext">Calculating rating…</p>
-            </div>
-            <div class="mt-auto pt-2 border-top">
-              <a href="questionnaire.html" class="btn btn-sm btn-outline-success w-100" id="rating-action-btn">
-                <i class="bi bi-ui-checks"></i> Skill Questionnaire
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Find Matches Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card stat-card h-100 p-2">
-          <div class="card-body d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div class="card-icon-badge amber mb-0"><i class="bi bi-pin-map-fill"></i></div>
-              <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Haversine GPS</span>
-            </div>
-            <h5 class="card-title mt-2">Nearby Lobbies</h5>
-            <p class="card-text text-muted small my-2 flex-grow-1">
-              Discover games happening near public parks, school grounds, and neighborhood turfs.
-            </p>
-            <div class="mt-auto pt-2 border-top">
-              <a href="find-matches.html" class="btn btn-sm btn-outline-success w-100">
-                <i class="bi bi-compass"></i> Explore Games
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- AI Coach Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card stat-card h-100 p-2">
-          <div class="card-body d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div class="card-icon-badge blue mb-0"><i class="bi bi-robot"></i></div>
-              <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Open Source</span>
-            </div>
-            <h5 class="card-title mt-2">AI Tactical Coach</h5>
-            <p class="card-text text-muted small my-2 flex-grow-1">
-              Ask 5v5 formations, dynamic warmups, and rule queries powered by Meta Llama 3.1 &amp; Mistral.
-            </p>
-            <div class="mt-auto pt-2 border-top">
-              <a href="chat.html" class="btn btn-sm btn-outline-success w-100">
-                <i class="bi bi-chat-dots-fill"></i> Chat with Coach
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile Summary Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card stat-card h-100 p-2">
-          <div class="card-body d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div class="card-icon-badge purple mb-0"><i class="bi bi-person-badge-fill"></i></div>
-              <span class="badge bg-secondary-subtle text-secondary border">Verified</span>
-            </div>
-            <h5 class="card-title mt-2">Player Profile</h5>
-            <div class="my-2 flex-grow-1" id="profile-summary">
-              <p class="text-muted small mb-0">Loading athlete card…</p>
-            </div>
-            <div class="mt-auto pt-2 border-top">
-              <a href="profile.html" class="btn btn-sm btn-outline-success w-100">
-                <i class="bi bi-pencil-square"></i> Edit Profile
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Developer Diagnostics Accordion -->
-    <div class="accordion mb-4" id="devDiagnosticsAccordion">
-      <div class="accordion-item border rounded-3 overflow-hidden shadow-sm">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed py-2 px-3 bg-light text-muted small" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDev">
-            <i class="bi bi-code-slash me-2 text-primary"></i> <strong>Developer Diagnostics &amp; Token Verification</strong>
-          </button>
-        </h2>
-        <div id="collapseDev" class="accordion-collapse collapse" data-bs-parent="#devDiagnosticsAccordion">
-          <div class="accordion-body small bg-white">
-            <p class="text-muted mb-2">
-              Calls <code>GET /api/auth/me</code> on Flask REST API with your Supabase Bearer token to test end-to-end token verification.
-            </p>
-            <button id="verify-btn" class="btn btn-sm btn-outline-secondary">Run Diagnostics</button>
-            <pre id="verify-result" class="mt-2 mb-0 d-none bg-dark text-light p-3 rounded font-monospace" style="font-size:.78rem"></pre>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Modern Footer -->
-  <footer class="site-footer mt-auto">
-    <div class="container text-center text-white-50 small py-3">
-      <p class="mb-0">&copy; 2026 NexSport — Community Sports Matchmaking &amp; AI Tactical Assistant</p>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/pages/dashboard.js"></script>
-  <script src="js/chat-widget.js"></script>
+  </div>
+  <div class="toast-wrap"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+  <script src="/assets/nexsport-integration.js"></script>
 </body>
-
 </html>

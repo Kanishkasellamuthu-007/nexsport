@@ -1,16 +1,44 @@
 /*
  * Auth helpers shared by all pages.
  *
- * - requireAuth(): redirects to login.html when no valid session (protected pages).
+ * - requireAuth(): redirects to index.html when no valid session (protected pages).
  * - getToken(): access token for Flask API calls.
  * - apiFetch(): fetch wrapper adding Authorization: Bearer <token>;
- *   on 401 it signs the user out locally and redirects to login.
+ *   on 401 it signs the user out locally and redirects to sign-in.
  * - friendlyAuthError(): maps Supabase error codes to human messages.
  */
 const AUTH_REDIRECT_PATHS = {
-  login: "login.html",
+  login: "index.html",
   dashboard: "dashboard.html",
 };
+
+const AUTH_PROTECTED_PAGES = new Set([
+  "create-room.html",
+  "dashboard.html",
+  "find-match.html",
+  "lobby.html",
+  "room.html",
+  "matches.html",
+  "profile.html",
+  "assessment.html",
+  "performance.html",
+  "leaderboard.html",
+  "courts.html",
+  "players.html",
+  "settings.html",
+  "notifications.html",
+  "verify.html",
+]);
+
+function getSafeAuthRedirect(target) {
+  if (!target) return null;
+  const parsed = new URL(target, location.origin);
+  if (parsed.origin !== location.origin) return null;
+  const filename = parsed.pathname.split("/").pop();
+  return AUTH_PROTECTED_PAGES.has(filename)
+    ? filename + parsed.search + parsed.hash
+    : null;
+}
 
 async function getSession() {
   const { data, error } = await supabaseClient.auth.getSession();
@@ -28,7 +56,7 @@ async function requireAuth() {
   const session = await getSession();
   if (!session) {
     window.location.replace(AUTH_REDIRECT_PATHS.login + "?redirect=" +
-      encodeURIComponent(location.pathname.split("/").pop()));
+      encodeURIComponent(location.pathname.split("/").pop() + location.search + location.hash));
     return null;
   }
   return session;

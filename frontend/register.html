@@ -1,105 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Account — NexSport</title>
-
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/auth.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Create your NexSport account | Sign up</title>
+  <meta name="description" content="Register for NexSport to take the skill assessment, get a seed rating and join balanced matches near you." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Create your NexSport account" />
+  <meta property="og:description" content="Register, complete the skill assessment and start playing balanced matches on NexSport." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
 </head>
-
-<body class="app-page">
-  <nav class="navbar navbar-dark site-navbar">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">
-        <span class="fs-4">⚽</span> <span class="brand-gradient">NexSport</span>
+<body data-page="register">
+  <div class="auth">
+    <section class="auth-aside">
+      <a class="brand" href="index.html">
+        <img class="brand-mark brand-logo" src="/__l5e/assets-v1/1cb031ba-f09c-4ef7-8a7b-43db7ebd17af/nexsport-logo.jpg" alt="NexSport" />
+        <span class="brand-name">Nex<span>Sport</span></span>
       </a>
-      <a href="index.html" class="btn btn-sm btn-glass"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
-    </div>
-  </nav>
-
-  <div class="container py-2">
-    <div class="card auth-card">
-      <div class="card-body">
-        <div class="text-center mb-4">
-          <div class="card-icon-badge emerald mx-auto mb-2" style="width: 52px; height: 52px; font-size: 1.4rem;">
-            🏆
-          </div>
-          <h1 class="h4 fw-bold mb-1">Create your athlete account</h1>
-          <p class="text-muted small mb-0">Join open pickup matches and track your Elo rating</p>
+      <div>
+        <h1>Register once. Play balanced games from day one.</h1>
+        <p class="lede">New accounts start with a one-time skill assessment, so your very first match is already fair.</p>
+        <div class="pill-list">
+          <span class="pill">1 &middot; Register</span>
+          <span class="pill">2 &middot; MCQ assessment</span>
+          <span class="pill">3 &middot; Skill verification</span>
+          <span class="pill">4 &middot; Seed rating</span>
         </div>
-
-        <div id="alert-box"></div>
-
-        <form id="register-form" novalidate>
-          <div class="mb-3">
-            <label for="full_name" class="form-label"><i class="bi bi-person me-1"></i> Display Name</label>
-            <input type="text" class="form-control" id="full_name" maxlength="50" placeholder="e.g. Rahul Sharma" required />
-            <div class="form-text-error" data-error-for="full_name"></div>
-          </div>
-          <div class="mb-3">
-            <label for="email" class="form-label"><i class="bi bi-envelope me-1"></i> Email</label>
-            <input type="email" class="form-control" id="email" placeholder="name@example.com" required autocomplete="email" />
-            <div class="form-text-error" data-error-for="email"></div>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label"><i class="bi bi-lock me-1"></i> Password</label>
-            <input type="password" class="form-control" id="password" minlength="6" placeholder="At least 6 characters" required
-              autocomplete="new-password" />
-            <div class="form-text small">At least 6 characters.</div>
-            <div class="form-text-error" data-error-for="password"></div>
-          </div>
-          <div class="mb-3">
-            <label for="confirm_password" class="form-label"><i class="bi bi-shield-lock me-1"></i> Confirm Password</label>
-            <input type="password" class="form-control" id="confirm_password" minlength="6" placeholder="Repeat password" required
-              autocomplete="new-password" />
-            <div class="form-text-error" data-error-for="confirm_password"></div>
-          </div>
-          <button type="submit" id="register-btn" class="btn btn-success btn-lg w-100 mb-3 fw-bold py-2">
-            Create Account
-          </button>
-        </form>
-
-        <div class="divider">or</div>
-
-        <button id="google-btn" class="btn btn-google w-100">
-          <svg width="18" height="18" viewBox="0 0 48 48" class="me-2" style="vertical-align:middle">
-            <path fill="#EA4335"
-              d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.8-6.8C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.2C12.4 13.4 17.7 9.5 24 9.5z" />
-            <path fill="#4285F4"
-              d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.7 6c4.5-4.2 6.9-10.3 6.9-17.7z" />
-            <path fill="#FBBC05"
-              d="M10.5 28.6c-.5-1.5-.8-3-.8-4.6s.3-3.1.8-4.6l-7.9-6.2C1 16.4 0 20.1 0 24s1 7.6 2.6 10.8l7.9-6.2z" />
-            <path fill="#34A853"
-              d="M24 48c6.2 0 11.5-2 15.4-5.6l-7.7-6c-2.1 1.4-4.8 2.3-7.7 2.3-6.3 0-11.6-3.9-13.5-9.4l-7.9 6.2C6.5 42.6 14.6 48 24 48z" />
-          </svg>
-          Sign up with Google
-        </button>
-
-        <p class="text-center text-muted small mt-4 mb-0">
-          Already registered? <a href="login.html" class="text-success fw-bold text-decoration-none">Sign in</a>
-        </p>
       </div>
-    </div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Skill-based matching</span><i></i>
+          <span>Verified courts</span><i></i>
+          <span>Performance analytics</span><i></i>
+          <span>Fair play ranking</span><i></i>
+          <span>Availability sync</span><i></i>
+          <span>Skill-based matching</span><i></i>
+          <span>Verified courts</span><i></i>
+          <span>Performance analytics</span><i></i>
+          <span>Fair play ranking</span><i></i>
+          <span>Availability sync</span><i></i>
+        </div>
+      </div>
+      <p class="muted">Your account is secured with Supabase Auth.</p>
+    </section>
+    <section class="auth-main">
+      <div class="auth-card">
+        <h2>Create account</h2>
+        <p class="sub">Set up your athlete profile, then take the skill assessment.</p>
+        <form id="register-form" novalidate>
+          <label class="field">
+            <span>Full name</span>
+            <input class="input" type="text" name="displayName" autocomplete="name" placeholder="e.g. Alex Carter" required />
+            <p class="field-error" id="err-displayName" aria-live="polite"></p>
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input class="input" type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
+            <p class="field-error" id="err-email" aria-live="polite"></p>
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>Primary sport</span>
+              <select class="input" name="sport">
+                <option value="">Select a sport</option>
+                <option>Badminton</option>
+                <option>Football</option>
+                <option>Cricket</option>
+                <option>Basketball</option>
+                <option>Tennis</option>
+                <option>Table tennis</option>
+              </select>
+              <p class="field-error" id="err-sport" aria-live="polite"></p>
+            </label>
+            <label class="field">
+              <span>City</span>
+              <input class="input" type="text" name="city" autocomplete="address-level2" placeholder="e.g. Kochi" />
+            <p class="field-error" id="err-city" aria-live="polite"></p>
+            </label>
+          </div>
+          <label class="field">
+            <span>Password</span>
+            <input class="input" type="password" name="password" autocomplete="new-password" placeholder="At least 8 characters" required />
+            <p class="field-error" id="err-password" aria-live="polite"></p>
+          </label>
+          <div class="pw-strength" id="pw-strength" data-score="0">
+            <div class="pw-bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <p class="pw-verdict" id="pw-verdict" role="status" aria-live="polite">Password strength: start typing</p>
+            <ul class="pw-rules" id="pw-rules">
+              <li data-rule="len"><span class="pw-tick" aria-hidden="true">○</span>At least 8 characters</li>
+              <li data-rule="upper"><span class="pw-tick" aria-hidden="true">○</span>One uppercase letter</li>
+              <li data-rule="lower"><span class="pw-tick" aria-hidden="true">○</span>One lowercase letter</li>
+              <li data-rule="digit"><span class="pw-tick" aria-hidden="true">○</span>One number</li>
+              <li data-rule="symbol"><span class="pw-tick" aria-hidden="true">○</span>One symbol (!&#64;#$…)</li>
+            </ul>
+          </div>
+          <label class="field">
+            <span>Confirm password</span>
+            <input class="input" type="password" name="confirm" autocomplete="new-password" placeholder="Re-enter password" required />
+            <p class="field-error" id="err-confirm" aria-live="polite"></p>
+          </label>
+          <div class="row" style="margin-top:14px">
+            <label class="checkbox"><input type="checkbox" name="terms" /> I agree to the fair-play rules</label>
+          </div>
+          <p class="field-error" id="err-terms" aria-live="polite"></p>
+          <p class="form-error" id="register-error" role="alert"></p>
+          <button class="btn btn-primary btn-block" type="submit">Create account &amp; start assessment</button>
+        </form>
+        <div class="demo-hint">
+          Already registered? <a class="link" href="index.html">Sign in instead</a><br />
+          Registration creates a secure NexSport account.
+        </div>
+      </div>
+    </section>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/pages/register.js"></script>
+  <div class="toast-wrap"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script type="module" src="/assets/app.js"></script>
+  <script src="/assets/nexsport-integration.js"></script>
 </body>
-
 </html>

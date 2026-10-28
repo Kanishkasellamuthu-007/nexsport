@@ -64,9 +64,9 @@ browser configuration from the Flask API, so the API must be running first.
   the JWT signature (RS256 via Supabase's JWKS, HS256 fallback via JWT secret)
   and expiry. The user id is taken **only** from the verified token's `sub`.
 - **Protected pages**: `dashboard.html` and `profile.html` call `requireAuth()`
-  and redirect anonymous visitors to `login.html`.
+  and redirect anonymous visitors to `index.html`.
 - **Expired sessions**: any 401 from the API signs the user out locally and
-  redirects to `login.html?expired=1`, which shows a notice.
+  redirects to `index.html?expired=1`, which shows a notice.
 
 ## 5. Manual test checklist
 
@@ -74,11 +74,11 @@ browser configuration from the Flask API, so the API must be running first.
 |---|------|-------|----------|
 | 1 | Register | `/register.html` → fill name/email/password → Create Account | Green success message (email confirm ON) or redirect to dashboard (confirm OFF); row appears in `profiles` |
 | 2 | Register validation | Submit empty form / mismatched passwords | Inline red field errors, no request sent |
-| 3 | Login (correct) | `/login.html` → valid credentials | Redirect to `dashboard.html`, email badge shows your email |
+| 3 | Login (correct) | `/index.html` → valid credentials | Redirect to `dashboard.html`, email badge shows your email |
 | 4 | Login (wrong password) | invalid password | "Incorrect email or password." alert, no redirect |
 | 5 | Google login | Click "Continue with Google" → choose account | Return via `oauth-callback.html` → dashboard; profile row created |
 | 6 | Logout | Dashboard → Logout | Back on homepage; nav shows Login again; refresh of dashboard redirects to login |
-| 7 | Protected page | Open `dashboard.html` in a logged-out (incognito) tab | Redirected to `login.html` |
+| 7 | Protected page | Open `dashboard.html` in a logged-out (incognito) tab | Redirected to `index.html` |
 | 8 | Unauthorized API | PowerShell: `Invoke-RestMethod http://127.0.0.1:5000/api/auth/me` | HTTP 401 `{"error":"Missing Authorization header"}` |
 | 9 | Authorized API | Dashboard → "Verify my session with the API" | Green JSON with your email + profile |
 | 10 | Expired session | Delete the access token from localStorage (`supabase.auth.getToken()` trick or wait for expiry) then call API | Redirect to login with the "session expired" notice |
