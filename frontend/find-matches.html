@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Matches — NexSport</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+
+<body class="app-page">
+  <nav class="navbar navbar-expand-lg navbar-dark site-navbar">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <span class="fs-4">⚽</span> <span class="brand-gradient">NexSport</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-grid-fill"></i> Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link active" href="find-matches.html"><i class="bi bi-search"></i> Find Matches</a></li>
+          <li class="nav-item"><a class="nav-link" href="create-lobby.html"><i class="bi bi-plus-circle"></i> Create Lobby</a></li>
+          <li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-robot"></i> AI Coach</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html"><i class="bi bi-person"></i> My Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" id="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4" style="max-width: 1040px;">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+      <div>
+        <h1 class="h3 fw-bold mb-1">Find Matches Near You</h1>
+        <p class="text-muted small mb-0">Discover public pickup match lobbies within your chosen distance radius.</p>
+      </div>
+      <a href="create-lobby.html" class="btn btn-sm btn-outline-success">
+        <i class="bi bi-plus-circle"></i> Host a New Game
+      </a>
+    </div>
+
+    <div id="alert-box"></div>
+
+    <!-- Location Card -->
+    <div class="card stat-card mb-4 border-0 shadow-sm">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="card-icon-badge emerald mb-0" style="width: 38px; height: 38px; font-size: 1.15rem;">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+          <h5 class="card-title mb-0">Your Search Location</h5>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <button id="gps-btn" class="btn btn-success">
+            <i class="bi bi-crosshair"></i> Use My GPS Location
+          </button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-toggle="collapse"
+            data-bs-target="#manualBox">
+            <i class="bi bi-sliders"></i> Enter Coordinates or Pick City
+          </button>
+        </div>
+
+        <!-- Manual Fallback -->
+        <div class="collapse" id="manualBox">
+          <div class="p-3 bg-light rounded-3 mb-2">
+            <div class="row g-2 align-items-end">
+              <div class="col-6 col-md-3">
+                <label class="form-label small" for="manual-lat">Latitude</label>
+                <input type="number" step="any" class="form-control form-control-sm" id="manual-lat" placeholder="e.g. 19.0760" />
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label small" for="manual-lon">Longitude</label>
+                <input type="number" step="any" class="form-control form-control-sm" id="manual-lon" placeholder="e.g. 72.8777" />
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label small" for="manual-city">City Preset</label>
+                <select id="manual-city" class="form-select form-select-sm">
+                  <option value="">— pick a demo city —</option>
+                  <option value="19.0760,72.8777">Mumbai (Bandra)</option>
+                  <option value="28.6129,77.2295">Delhi (India Gate)</option>
+                  <option value="12.9763,77.5929">Bengaluru (Cubbon Park)</option>
+                  <option value="13.0827,80.2707">Chennai (Marina)</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <button id="manual-btn" class="btn btn-sm btn-outline-success w-100">Set Location</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="location-status" class="alert alert-light border py-2 px-3 small mb-0 d-flex align-items-center gap-2">
+          <i class="bi bi-info-circle text-muted"></i> <span>Location not set yet. Click GPS or pick a city above.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="card stat-card mb-4 d-none border-0 shadow-sm" id="filters-card">
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label" for="filter-sport"><i class="bi bi-trophy me-1"></i> Sport</label>
+            <select id="filter-sport" class="form-select">
+              <option value="">All Sports</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="filter-radius"><i class="bi bi-radar me-1"></i> Search Radius</label>
+            <select id="filter-radius" class="form-select">
+              <option value="2">Within 2 km</option>
+              <option value="5">Within 5 km</option>
+              <option value="10" selected>Within 10 km (Standard)</option>
+              <option value="25">Within 25 km</option>
+              <option value="50">Within 50 km</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button id="search-btn" class="btn btn-success w-100 py-2">
+              <i class="bi bi-search"></i> Search Lobbies
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <section id="results" aria-live="polite"></section>
+  </main>
+
+  <footer class="site-footer mt-auto py-3">
+    <div class="container text-center text-white-50 small">
+      <p class="mb-0">&copy; 2026 NexSport — Public Sports Ground Matchmaking</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pages/find-matches.js"></script>
+  <script src="js/chat-widget.js"></script>
+</body>
+
+</html>

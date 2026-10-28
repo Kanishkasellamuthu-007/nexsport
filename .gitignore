@@ -1,0 +1,34 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- Environment / secrets ----
+.env
+.env.local
+.env.*.local
+
+# ---- Node / Capacitor build output (future stages) ----
+node_modules/
+www/
+android/
+ios/
+.capacitor/
+
+# ---- Frontend build artifacts ----
+frontend/assets/vendor/
+
+# ---- IDE / OS ----
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---- Misc ----
+*.log
+.vercel

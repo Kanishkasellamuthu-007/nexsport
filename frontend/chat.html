@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Sports Assistant — NexSport</title>
+  <meta name="description" content="Chat with open-source AI models via GitHub Models for sports tactics, rules, warm-up drills, and NexSport matchmaking." />
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+
+<body class="app-page">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark site-navbar">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <span class="fs-4">⚽</span> <span class="brand-gradient">NexSport</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="bi bi-grid-fill"></i> Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="find-matches.html"><i class="bi bi-search"></i> Find Matches</a></li>
+          <li class="nav-item"><a class="nav-link" href="create-lobby.html"><i class="bi bi-plus-circle"></i> Create Lobby</a></li>
+          <li class="nav-item"><a class="nav-link active fw-semibold" href="chat.html"><i class="bi bi-robot"></i> AI Coach</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html"><i class="bi bi-person"></i> My Profile</a></li>
+          <li class="nav-item" id="nav-login"><a class="nav-link btn-login" href="login.html"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+          <li class="nav-item d-none" id="nav-logout"><a class="nav-link" href="#" id="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Chat Container -->
+  <main class="container my-4" style="max-width: 900px;">
+    <div class="card chat-card shadow-sm">
+      <!-- Chat Header -->
+      <div class="card-header bg-white border-bottom p-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="fs-4">🏆</span>
+            <div>
+              <h1 class="h5 mb-0 fw-bold">NexSport AI Coach</h1>
+              <small class="text-muted">Powered by GitHub Open-Source Models</small>
+            </div>
+          </div>
+
+          <!-- Controls: Model selector & Settings -->
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="input-group input-group-sm" style="min-width: 240px;">
+              <label class="input-group-text bg-light text-muted" for="model-select">Model</label>
+              <select id="model-select" class="form-select form-select-sm" aria-label="Select open-source model">
+                <option value="meta/llama-3.1-70b-instruct" selected>🦙 Meta Llama 3.1 70B (Recommended)</option>
+                <option value="meta/llama-3.1-8b-instruct">⚡ Meta Llama 3.1 8B (Fast)</option>
+                <option value="mistralai/mistral-large-2407">🌪️ Mistral Large 2 (Tactics)</option>
+                <option value="mistralai/mistral-small">💨 Mistral Small (Lightweight)</option>
+                <option value="microsoft/phi-3.5-mini-instruct">🔬 Microsoft Phi-3.5 Mini</option>
+                <option value="deepseek/deepseek-r1">🧠 DeepSeek R1 (Reasoning)</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="token-settings-btn" title="GitHub Token Settings" data-bs-toggle="modal" data-bs-target="#settingsModal">
+              <i class="bi bi-gear-fill"></i> Settings
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger" id="clear-chat-btn" title="Clear Conversation">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Active model badge & status banner -->
+        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+          <div id="model-status-pill" class="badge bg-success-subtle text-success-emphasis border border-success-subtle">
+            <i class="bi bi-cpu me-1"></i> <span id="active-model-name">Meta Llama 3.1 70B</span>
+          </div>
+          <div id="token-status-pill" class="badge bg-light text-secondary border">
+            Checking status…
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages Window -->
+      <div class="card-body p-3 p-md-4 chat-messages-container" id="chat-messages" tabindex="0" aria-live="polite">
+        <!-- Welcome message -->
+        <div class="chat-message assistant-message mb-3">
+          <div class="message-avatar">🏅</div>
+          <div class="message-content">
+            <div class="message-header">
+              <strong class="text-success">NexSport Coach</strong>
+              <span class="badge bg-light text-muted border ms-2">Open Source AI</span>
+            </div>
+            <div class="message-body mt-1">
+              <p>Hey there, athlete! 👋 I'm your tactical coach and sports assistant on NexSport.</p>
+              <p>I can help you with:</p>
+              <ul>
+                <li><strong>Tactics & Formations</strong>: 5v5/7v7 Football, Basketball spacing, Cricket setups.</li>
+                <li><strong>Rules & Pitch Layouts</strong>: Dimensions, fouls, scoring across sports.</li>
+                <li><strong>Warm-up & Injury Prevention</strong>: 10-minute dynamic routines and stretches.</li>
+                <li><strong>NexSport Matchmaking</strong>: How our <em>Elo ratings</em>, <em>skill questionnaire</em>, and <em>greedy zig-zag team balancing</em> work.</li>
+              </ul>
+              <p class="mb-0">Pick a model from the header and ask a question below, or tap a quick prompt to start!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick suggestion pills -->
+        <div class="quick-prompts-container my-3" id="quick-prompts">
+          <small class="text-muted d-block mb-2 fw-semibold">💡 Try asking:</small>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm btn-outline-success quick-prompt-btn" data-prompt="Suggest a 1-2-1 diamond tactic for 5v5 football on turf.">
+              ⚽ 5v5 Football Diamond Tactic
+            </button>
+            <button class="btn btn-sm btn-outline-success quick-prompt-btn" data-prompt="Give me a 10-minute dynamic warm-up routine before a pickup match.">
+              🏃 10-Min Dynamic Warmup
+            </button>
+            <button class="btn btn-sm btn-outline-success quick-prompt-btn" data-prompt="What are standard cricket pitch measurements and boundary guidelines?">
+              🏏 Cricket Pitch Dimensions
+            </button>
+            <button class="btn btn-sm btn-outline-success quick-prompt-btn" data-prompt="How does NexSport's greedy zig-zag team split create balanced teams?">
+              ⚖️ How Team Split Works
+            </button>
+            <button class="btn btn-sm btn-outline-success quick-prompt-btn" data-prompt="What are the essential half-court basketball pickup rules and pick-and-roll defense?">
+              🏀 Basketball Defense Tips
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div id="typing-indicator" class="chat-typing px-4 py-2 border-top bg-light d-none">
+        <div class="d-flex align-items-center gap-2 text-muted small">
+          <div class="spinner-grow spinner-grow-sm text-success" role="status"></div>
+          <span>NexSport Coach is analyzing tactics…</span>
+        </div>
+      </div>
+
+      <!-- Chat Input Footer -->
+      <div class="card-footer bg-white border-top p-3">
+        <form id="chat-form" class="d-flex gap-2 align-items-end">
+          <div class="flex-grow-1 position-relative">
+            <textarea id="chat-input" class="form-control" rows="1" placeholder="Ask about tactics, warmups, rules, or NexSport matchmaking…" style="resize: none; max-height: 120px;"></textarea>
+          </div>
+          <button type="submit" id="send-btn" class="btn btn-success px-4 d-flex align-items-center gap-1" style="height: 42px;">
+            <i class="bi bi-send-fill"></i> <span class="d-none d-sm-inline">Send</span>
+          </button>
+        </form>
+        <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+          <small class="text-muted" style="font-size: 0.75rem;">
+            Press <kbd>Enter</kbd> to send, <kbd>Shift + Enter</kbd> for a new line.
+          </small>
+          <small class="text-muted" style="font-size: 0.75rem;">
+            Powered by GitHub Models Inference API
+          </small>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Token Settings Modal -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="settingsModalLabel">⚙️ GitHub Models Settings</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="small text-muted mb-3">
+            NexSport connects directly to open-source models via the <strong>GitHub Models Inference API</strong>
+            (Meta Llama 3.1, Mistral, Microsoft Phi, DeepSeek).
+          </p>
+
+          <div class="alert alert-info py-2 small mb-3">
+            <i class="bi bi-info-circle-fill me-1"></i>
+            <strong>Server Status:</strong> <span id="modal-server-status">Checking…</span>
+          </div>
+
+          <div class="mb-3">
+            <label for="custom-github-token" class="form-label fw-semibold">Personal GitHub Access Token (Optional)</label>
+            <input type="password" class="form-control form-control-sm font-monospace" id="custom-github-token"
+              placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+            <div class="form-text">
+              Enter your free GitHub Personal Access Token to use your own quota. Stored only in your browser's <code>localStorage</code>.
+            </div>
+          </div>
+
+          <div class="p-3 bg-light rounded small mb-3">
+            <strong class="d-block mb-1">How to get a free GitHub Token:</strong>
+            <ol class="mb-0 ps-3">
+              <li>Visit <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">GitHub Token Settings</a>.</li>
+              <li>Click <em>Generate new token (classic)</em>.</li>
+              <li>No extra scopes or permissions are required for public model inference.</li>
+              <li>Copy and paste the token here or add it to <code>.env</code> as <code>GITHUB_TOKEN=...</code>.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-outline-danger" id="modal-clear-token-btn">Clear Saved Token</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-sm btn-success" id="modal-save-token-btn">Save Token</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CDN scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
+  <!-- Application scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pages/chat.js"></script>
+</body>
+
+</html>
+
