@@ -261,32 +261,36 @@
       if (rating) {
         setText('[data-flow="elo"]', rating.current_rating);
         setText('[data-flow="played"]', rating.matches_count);
-        }
+      } else {
+        setText('[data-flow="elo"]', "—");
+        setText('[data-flow="played"]', "0");
+      }
     } else failures.push(ratings.data.error || "Could not load ratings.");
 
     if (!verifications.ok) {
-        failures.push(verifications.data.error || "Could not load verification status.");
-        var verificationMessage = document.getElementById("verification-message");
-        if (verificationMessage) {
-          verificationMessage.textContent = failures[failures.length - 1];
-          verificationMessage.dataset.loadError = "true";
-        }
+      failures.push(verifications.data.error || "Could not load verification status.");
+      setText('[data-flow="verify-state"]', "Unavailable");
+      var verificationMessage = document.getElementById("verification-message");
+      if (verificationMessage) {
+        verificationMessage.textContent = failures[failures.length - 1];
+        verificationMessage.dataset.loadError = "true";
+      }
     } else {
-        var previousError = document.getElementById("verification-message");
-        if (previousError && previousError.dataset.loadError) {
-          previousError.textContent = "";
-          delete previousError.dataset.loadError;
-        }
-        var submissions = verifications.data.submissions || [];
-        var latest = submissions[0];
-        var statusLabels = { pending: "Pending review", approved: "Verified", rejected: "Changes requested" };
-        setText('[data-flow="verify-state"]', latest ? statusLabels[latest.status] || latest.status : "Not submitted");
-        renderVerificationSubmissions(submissions);
+      var previousError = document.getElementById("verification-message");
+      if (previousError && previousError.dataset.loadError) {
+        previousError.textContent = "";
+        delete previousError.dataset.loadError;
+      }
+      var submissions = verifications.data.submissions || [];
+      var latest = submissions[0];
+      var statusLabels = { pending: "Pending review", approved: "Verified", rejected: "Changes requested" };
+      setText('[data-flow="verify-state"]', latest ? statusLabels[latest.status] || latest.status : "Not submitted");
+      renderVerificationSubmissions(submissions);
     }
 
     var errorMessage = failures.join(" ");
     if (errorMessage && errorMessage !== lastSkillDataError) {
-        window.nexToast("Account data unavailable", errorMessage);
+      window.nexToast("Account data unavailable", errorMessage);
     }
     lastSkillDataError = errorMessage;
     skillRefreshInFlight = false;
@@ -314,10 +318,18 @@
     var submit = document.getElementById("assessment-submit");
     if (!select || !questions || !submit) return;
 
-    var [sports, response] = await Promise.all([
-      loadSports(),
-      apiFetch("/api/questionnaire/questions")
-    ]);
+    var sports;
+    var response;
+    try {
+      [sports, response] = await Promise.all([
+        loadSports(),
+        apiFetch("/api/questionnaire/questions")
+      ]);
+    } catch (error) {
+      document.getElementById("assessment-status").textContent =
+        error && error.message || "Could not load the assessment. Check your connection and try again.";
+      return;
+    }
     select.innerHTML = '<option value="">Select a sport</option>' +
       sports.map(function (sport) {
         return '<option value="' + escapeHtml(sport.id) + '">' + escapeHtml(sport.name) + "</option>";
@@ -365,10 +377,17 @@
     var button = document.getElementById("assessment-submit");
     resultBox.textContent = "";
     setBusy(button, true, "Saving assessment...");
-    var result = await apiFetch("/api/questionnaire/submit", {
-      method: "POST",
-      body: JSON.stringify({ sport_id: sportId, answers: answers })
-    });
+    var result;
+    try {
+      result = await apiFetch("/api/questionnaire/submit", {
+        method: "POST",
+        body: JSON.stringify({ sport_id: sportId, answers: answers })
+      });
+    } catch (error) {
+      resultBox.textContent = error && error.message || "Could not save your assessment. Check your connection and try again.";
+      setBusy(button, false);
+      return;
+    }
     setBusy(button, false);
     if (!result.ok) {
       resultBox.textContent = result.data.error || "Could not save your assessment.";

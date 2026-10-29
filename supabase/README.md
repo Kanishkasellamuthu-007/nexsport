@@ -40,7 +40,7 @@ Supabase SQL Editor:
 | `match_results` | Authoritative final score per match. | **unique (match_id)** + `idempotency_key` unique → no duplicate processing; `ratings_applied` flag |
 | `player_ratings` | Current authoritative Elo per (user, sport) + peak. | unique (user_id, sport_id); **no user write policies** |
 | `rating_history` | Append-only Elo ledger (before/after/delta/reason). | unique (user, sport, match, reason) |
-| `skill_verification_submissions` | Evidence submission metadata and review status. | evidence is stored in a private bucket; only the backend can submit or change review status |
+| `skill_verification_submissions` | Evidence submission metadata and review status. | evidence is stored in a private bucket; submissions stay pending until reviewed |
 | `peer_feedback` | Post-match 1–5 ratings between players. | unique (match, reviewer, reviewee); can't review self |
 | `match_statistics` | Per-player stats; `custom_stats` jsonb for sport-specific metrics. | unique (match_id, user_id) |
 
