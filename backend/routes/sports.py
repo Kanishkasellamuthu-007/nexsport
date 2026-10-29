@@ -33,9 +33,11 @@ def list_sports():
     """Public list of active sports (used by the questionnaire dropdown)."""
     try:
         from supabase import create_client
-        admin = create_client(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY)
+        # Sports are public read-only data, so use the browser-safe key and
+        # return the database UUIDs required by lobby creation.
+        public_client = create_client(config.SUPABASE_URL, config.SUPABASE_ANON_KEY)
         res = (
-            admin.table("sports")
+            public_client.table("sports")
             .select("id,code,name,icon,team_size,min_players,max_players")
             .eq("is_active", True)
             .order("name")
@@ -43,10 +45,9 @@ def list_sports():
         )
         if res.data:
             return jsonify({"sports": res.data}), 200
+        return jsonify({"error": "No active sports found. Run the sports seed migration."}), 503
     except Exception:  # noqa: BLE001
-        pass
-    # Fallback to demo sports when Supabase is unavailable
-    return jsonify({"sports": DEMO_SPORTS}), 200
+        return jsonify({"error": "Could not load sports from Supabase. Check configuration and migrations."}), 503
 
 @sports_bp.get("/grounds")
 def list_grounds():

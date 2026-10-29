@@ -664,17 +664,29 @@
   async function loadSports() {
     if (sportsCache) return sportsCache;
     var response = await fetch(CONFIG.API_BASE_URL + "/api/sports");
-    var data = await response.json();
-    sportsCache = data.sports || [];
+    var data = await response.json().catch(function () { return {}; });
+    if (!response.ok) throw new Error(data.error || "Sports could not be loaded.");
+    sportsCache = (data.sports || []).filter(function (item) {
+      return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(item.id || ""));
+    });
     return sportsCache;
   }
 
   async function initRoomForm() {
-    var sports = await loadSports();
     var sport = document.querySelector('#room-form [name="sport"]');
-    if (sport) {
-      sport.innerHTML = '<option value="">Select a sport</option>' +
-        sports.map(function (item) { return '<option value="' + item.id + '" data-team-size="' + item.team_size + '">' + item.name + '</option>'; }).join("");
+    try {
+      var sports = await loadSports();
+      if (!sports.length) throw new Error("No database sports are available.");
+      if (sport) {
+        sport.innerHTML = '<option value="">Select a sport</option>' +
+          sports.map(function (item) { return '<option value="' + item.id + '" data-team-size="' + item.team_size + '">' + item.name + '</option>'; }).join("");
+      }
+    } catch (error) {
+      if (sport) {
+        sport.innerHTML = '<option value="">Sports unavailable — check Supabase setup</option>';
+        sport.disabled = true;
+      }
+      console.error("Room sports unavailable:", error);
     }
     var ground = document.querySelector('#room-form [name="ground"]');
     if (ground) {
@@ -727,8 +739,8 @@
     var groundName = values.ground.trim();
     var title = groundName + " " + selected.textContent.trim();
     var scheduledDate = new Date(values.date + "T" + values.time);
-    if (!selected.value) {
-      window.nexToast("Check room details", "Choose a sport.");
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(selected.value || ""))) {
+      window.nexToast("Sports unavailable", "Reload the page after the sports database is configured.");
       form.elements.sport.focus();
       return;
     }
