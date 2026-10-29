@@ -322,6 +322,16 @@
       var list = document.createElement("datalist");
       list.id = "ground-options";
       ground.insertAdjacentElement("afterend", list);
+      ground.addEventListener("change", function () {
+        var selectedGround = Array.from(list.options).find(function (option) {
+          return option.value === ground.value;
+        });
+        if (!selectedGround) return;
+        var latitude = document.querySelector('#room-form [name="lat"]');
+        var longitude = document.querySelector('#room-form [name="lng"]');
+        latitude.value = selectedGround.dataset.lat || "";
+        longitude.value = selectedGround.dataset.lon || "";
+      });
       fetch(CONFIG.API_BASE_URL + "/api/grounds").then(function (response) { return response.json(); }).then(function (data) {
         list.innerHTML = (data.grounds || []).map(function (item) {
           return '<option value="' + item.name + '" data-ground-id="' + item.id + '" data-lat="' + item.latitude + '" data-lon="' + item.longitude + '">';
@@ -354,19 +364,53 @@
     var maxPlayers = parseInt(values.players, 10);
     var lat = parseFloat(values.lat);
     var lng = parseFloat(values.lng);
-    if (!selected.value || !Number.isFinite(maxPlayers) || maxPlayers < teamSize * 2 || !Number.isFinite(lat) || !Number.isFinite(lng)) {
-      window.nexToast("Check room details", "Choose a sport, at least two full teams, and coordinates.");
+    var groundName = values.ground.trim();
+    var title = groundName + " " + selected.textContent.trim();
+    var scheduledDate = new Date(values.date + "T" + values.time);
+    if (!selected.value) {
+      window.nexToast("Check room details", "Choose a sport.");
+      form.elements.sport.focus();
+      return;
+    }
+    if (groundName.length < 3) {
+      window.nexToast("Check room details", "Enter a ground or venue name.");
+      form.elements.ground.focus();
+      return;
+    }
+    if (!values.date || !values.time || !Number.isFinite(scheduledDate.getTime()) || scheduledDate <= new Date()) {
+      window.nexToast("Check room details", "Choose a future date and start time.");
+      form.elements.date.focus();
+      return;
+    }
+    if (!Number.isInteger(maxPlayers) || maxPlayers < teamSize * 2 || maxPlayers > 30) {
+      window.nexToast("Check room details", "Players required must fit two full teams and be no more than 30.");
+      form.elements.players.focus();
+      return;
+    }
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
+      window.nexToast("Check room details", "Enter a latitude between -90 and 90.");
+      form.elements.lat.focus();
+      return;
+    }
+    if (!Number.isFinite(lng) || lng < -180 || lng > 180) {
+      window.nexToast("Check room details", "Enter a longitude between -180 and 180.");
+      form.elements.lng.focus();
+      return;
+    }
+    if (title.length > 100) {
+      window.nexToast("Check room details", "Shorten the ground name so the room title is no more than 100 characters.");
+      form.elements.ground.focus();
       return;
     }
     var groundOptions = document.querySelectorAll("#ground-options option");
-    var ground = Array.from(groundOptions).find(function (option) { return option.value === values.ground; });
-    var scheduledAt = new Date(values.date + "T" + values.time).toISOString();
+    var ground = Array.from(groundOptions).find(function (option) { return option.value === groundName; });
+    var scheduledAt = scheduledDate.toISOString();
     var button = form.querySelector('[type="submit"]');
     setBusy(button, true, "Creating room...");
     var result = await apiFetch("/api/lobbies", {
       method: "POST",
       body: JSON.stringify({
-        title: values.ground + " " + selected.textContent.trim(),
+        title: title,
         sport_id: selected.value,
         ground_id: ground ? ground.dataset.groundId : null,
         latitude: lat,

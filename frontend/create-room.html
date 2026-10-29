@@ -113,8 +113,8 @@
                     <option>Open to all</option><option>Developing</option><option>Intermediate</option><option>Advanced</option>
                   </select>
                 </label>
-                <label class="field"><span>Latitude</span><input class="input" name="lat" placeholder="Optional" /></label>
-                <label class="field"><span>Longitude</span><input class="input" name="lng" placeholder="Optional" /></label>
+                <label class="field"><span>Latitude</span><input class="input" name="lat" type="number" min="-90" max="90" step="any" placeholder="Required" required /></label>
+                <label class="field"><span>Longitude</span><input class="input" name="lng" type="number" min="-180" max="180" step="any" placeholder="Required" required /></label>
               </div>
               <button type="button" class="btn btn-ghost btn-sm" id="use-location" style="margin-top:4px">Use my current location</button>
               <label class="field" style="margin-top:14px"><span>Description <span class="muted">(optional)</span></span>

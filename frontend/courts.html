@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body data-page="courts">
   <div class="backdrop" aria-hidden="true"></div>
@@ -162,7 +163,7 @@
           <div><h3>Map view</h3><div class="hint">Interactive map</div></div>
           
         </div>
-        <div class="placeholder"><div><strong>Map placeholder</strong>A live map renders here when a maps provider is connected.</div></div>
+        <div id="map" style="height:400px; width:100%;"></div>
       </section>
       <section class="card">
         <div class="card-head">

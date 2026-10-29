@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "City Sports Complex",
+    "sport": "Football",
+    "venue_type": "Outdoor",
+    "access": "Free",
+    "lat": 37.7749,
+    "lng": -122.4194,
+    "address": "123 Main St, San Francisco, CA"
+  },
+  {
+    "id": 2,
+    "name": "Downtown Basketball Court",
+    "sport": "Basketball",
+    "venue_type": "Indoor",
+    "access": "Members only",
+    "lat": 37.7786,
+    "lng": -122.4148,
+    "address": "456 Market St, San Francisco, CA"
+  },
+  {
+    "id": 3,
+    "name": "River Park Tennis Courts",
+    "sport": "Tennis",
+    "venue_type": "Outdoor",
+    "access": "Paid",
+    "lat": 37.7694,
+    "lng": -122.4862,
+    "address": "789 Park Blvd, San Francisco, CA"
+  }
+]
