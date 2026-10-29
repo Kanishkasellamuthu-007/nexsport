@@ -1,32 +1,134 @@
 [
   {
     "id": 1,
-    "name": "City Sports Complex",
+    "name": "Chennai Sports Arena",
     "sport": "Football",
-    "venue_type": "Outdoor",
-    "access": "Free",
-    "lat": 37.7749,
-    "lng": -122.4194,
-    "address": "123 Main St, San Francisco, CA"
+    "venue_type": "Turf",
+    "access": "Paid",
+    "lat": 13.0827,
+    "lng": 80.2707,
+    "address": "12 Anna Salai, Chennai, TN",
+    "rating": 4.5
   },
   {
     "id": 2,
-    "name": "Downtown Basketball Court",
+    "name": "Marina Basketball Court",
     "sport": "Basketball",
-    "venue_type": "Indoor",
-    "access": "Members only",
-    "lat": 37.7786,
-    "lng": -122.4148,
-    "address": "456 Market St, San Francisco, CA"
+    "venue_type": "Outdoor",
+    "access": "Free",
+    "lat": 13.0500,
+    "lng": 80.2824,
+    "address": "Marina Beach Rd, Chennai, TN",
+    "rating": 4.2
   },
   {
     "id": 3,
-    "name": "River Park Tennis Courts",
+    "name": "Nungambakkam Tennis Club",
     "sport": "Tennis",
+    "venue_type": "Court",
+    "access": "Members only",
+    "lat": 13.0569,
+    "lng": 80.2425,
+    "address": "45 Sterling Rd, Nungambakkam, Chennai",
+    "rating": 4.7
+  },
+  {
+    "id": 4,
+    "name": "ECR Cricket Ground",
+    "sport": "Cricket",
     "venue_type": "Outdoor",
     "access": "Paid",
-    "lat": 37.7694,
-    "lng": -122.4862,
-    "address": "789 Park Blvd, San Francisco, CA"
+    "lat": 12.9516,
+    "lng": 80.2547,
+    "address": "ECR Main Rd, Neelankarai, Chennai",
+    "rating": 4.0
+  },
+  {
+    "id": 5,
+    "name": "Velachery Badminton Hub",
+    "sport": "Badminton",
+    "venue_type": "Indoor",
+    "access": "Paid",
+    "lat": 12.9815,
+    "lng": 80.2180,
+    "address": "100 Feet Rd, Velachery, Chennai",
+    "rating": 4.6
+  },
+  {
+    "id": 6,
+    "name": "Anna University Swimming Pool",
+    "sport": "Swimming",
+    "venue_type": "Pool",
+    "access": "Members only",
+    "lat": 13.0108,
+    "lng": 80.2354,
+    "address": "Anna University Campus, Guindy, Chennai",
+    "rating": 4.1
+  },
+  {
+    "id": 7,
+    "name": "T. Nagar Volleyball Ground",
+    "sport": "Volleyball",
+    "venue_type": "Outdoor",
+    "access": "Free",
+    "lat": 13.0418,
+    "lng": 80.2341,
+    "address": "Pondy Bazaar, T. Nagar, Chennai",
+    "rating": 3.8
+  },
+  {
+    "id": 8,
+    "name": "IIT Madras Running Track",
+    "sport": "Running",
+    "venue_type": "Track",
+    "access": "Free",
+    "lat": 12.9916,
+    "lng": 80.2336,
+    "address": "IIT Madras Campus, Adyar, Chennai",
+    "rating": 4.8
+  },
+  {
+    "id": 9,
+    "name": "OMR Table Tennis Centre",
+    "sport": "Table tennis",
+    "venue_type": "Indoor",
+    "access": "Paid",
+    "lat": 12.9132,
+    "lng": 80.2270,
+    "address": "Sholinganallur, OMR, Chennai",
+    "rating": 4.3
+  },
+  {
+    "id": 10,
+    "name": "Besant Nagar Football Turf",
+    "sport": "Football",
+    "venue_type": "Turf",
+    "access": "Paid",
+    "lat": 13.0002,
+    "lng": 80.2660,
+    "address": "Elliot Beach Rd, Besant Nagar, Chennai",
+    "rating": 4.4
+  },
+  {
+    "id": 11,
+    "name": "Porur Cricket Academy",
+    "sport": "Cricket",
+    "venue_type": "Turf",
+    "access": "Paid",
+    "lat": 13.0382,
+    "lng": 80.1567,
+    "address": "Trunk Rd, Porur, Chennai",
+    "rating": 4.2
+  },
+  {
+    "id": 12,
+    "name": "Egmore Indoor Stadium",
+    "sport": "Basketball",
+    "venue_type": "Indoor",
+    "access": "Paid",
+    "lat": 13.0732,
+    "lng": 80.2609,
+    "address": "EVR Salai, Egmore, Chennai",
+    "rating": 4.5
   }
 ]

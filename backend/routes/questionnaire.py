@@ -14,6 +14,53 @@ def questions():
     return jsonify({"questions": irs.get_questions()}), 200
 
 
+@questionnaire_bp.get("/me")
+def my_assessments():
+    """Return the caller's saved assessment and seed-rating status per sport."""
+    try:
+        claims = verify_request_user(request)
+    except AuthError as exc:
+        return jsonify({"error": exc.message}), exc.status_code
+
+    try:
+        from supabase import create_client
+        from backend.config import config
+
+        admin = create_client(config.SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY)
+        profiles = (
+            admin.table("player_skill_profiles")
+            .select("sport_id,questionnaire_completed,cached_rating,sports(name)")
+            .eq("user_id", claims["sub"])
+            .execute()
+        )
+        ratings = (
+            admin.table("initial_ratings")
+            .select("sport_id,rating,attempt_no,created_at")
+            .eq("user_id", claims["sub"])
+            .order("attempt_no")
+            .execute()
+        )
+        initial_by_sport = {}
+        for rating in ratings.data or []:
+            initial_by_sport.setdefault(rating["sport_id"], rating)
+
+        assessments = []
+        for profile in profiles.data or []:
+            initial = initial_by_sport.get(profile["sport_id"], {})
+            sport = profile.get("sports") or {}
+            assessments.append({
+                "sport_id": profile["sport_id"],
+                "sport_name": sport.get("name", "Sport"),
+                "completed": profile["questionnaire_completed"],
+                "seed_rating": initial.get("rating", profile["cached_rating"]),
+                "attempt_no": initial.get("attempt_no"),
+            })
+        return jsonify({"assessments": assessments}), 200
+    except Exception as exc:  # noqa: BLE001
+        print(f"[questionnaire] status load failed for {claims['sub']}: {exc}")
+        return jsonify({"error": "Could not load assessment status."}), 500
+
+
 @questionnaire_bp.post("/submit")
 def submit():
     """Submit answers for ONE sport. Token-verified.

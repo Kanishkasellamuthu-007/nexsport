@@ -5,6 +5,8 @@
 
   var AUTH_SESSION_KEY = "nexsport.auth.session";
   var page = document.body.getAttribute("data-page");
+  var lastSkillDataError = "";
+  var skillRefreshInFlight = false;
   var protectedPages = new Set([
     "dashboard", "find-match", "create-room", "room", "matches",
     "courts", "players", "performance", "leaderboard", "assessment",
@@ -38,11 +40,13 @@
   }
 
   async function apiFetch(path, options) {
+    var isFormData = options && options.body instanceof FormData;
     var session = await getSession();
     var headers = Object.assign(
       { "Content-Type": "application/json" },
       (options && options.headers) || {}
     );
+    if (isFormData) delete headers["Content-Type"];
     if (session) headers.Authorization = "Bearer " + session.access_token;
     var response = await fetch(CONFIG.API_BASE_URL + path, Object.assign({}, options || {}, { headers: headers }));
     var data = await response.json().catch(function () { return {}; });
@@ -104,6 +108,14 @@
       event.preventDefault();
       event.stopImmediatePropagation();
       submitRoom(event.target);
+    } else if (event.target.id === "assessment-form") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitAssessment(event.target);
+    } else if (event.target.id === "verify-form") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitVerification(event.target);
     } else if (event.target.id === "profile-form" || event.target.id === "settings-form") {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -194,6 +206,262 @@
     return result.data;
   }
 
+  async function refreshSkillData() {
+    if (skillRefreshInFlight) return;
+    skillRefreshInFlight = true;
+    var assessments;
+    var ratings;
+    var verifications;
+    try {
+      [assessments, ratings, verifications] = await Promise.all([
+        apiFetch("/api/questionnaire/me"),
+        apiFetch("/api/ratings/me"),
+        apiFetch("/api/verification/me")
+      ]);
+    } catch (error) {
+      var message = error && error.message || "Could not refresh account data.";
+      if (message !== lastSkillDataError) {
+        window.nexToast("Account data unavailable", message);
+        lastSkillDataError = message;
+      }
+      skillRefreshInFlight = false;
+      return;
+    }
+
+    var failures = [];
+    var records = assessments.ok ? assessments.data.assessments || [] : [];
+    if (!assessments.ok) failures.push(assessments.data.error || "Could not load assessment status.");
+    var assessmentStatus = document.getElementById("assessment-status");
+    if (assessmentStatus) {
+      assessmentStatus.textContent = assessments.ok
+        ? "Your progress and seed rating are saved to your account."
+        : failures[0];
+    }
+    var sportSelect = document.getElementById("assessment-sport");
+    var selected = sportSelect && sportSelect.value;
+    var activeAssessment = records.find(function (item) { return item.sport_id === selected; }) || records[0];
+    if (sportSelect && activeAssessment && !selected) {
+      sportSelect.value = activeAssessment.sport_id;
+      activeAssessment = records.find(function (item) { return item.sport_id === sportSelect.value; });
+    }
+    setText('[data-flow="seed-elo"]', assessments.ok && activeAssessment ? activeAssessment.seed_rating : "—");
+    setText(
+      '[data-flow="assessment-state"]',
+      !assessments.ok
+        ? "Unavailable"
+        : activeAssessment && activeAssessment.completed
+          ? "Completed · " + activeAssessment.sport_name
+          : "Not started"
+    );
+
+    if (ratings.ok) {
+      var rating = (ratings.data.ratings || []).find(function (item) {
+        return !selected || item.sport_id === selected;
+      }) || (ratings.data.ratings || [])[0];
+      if (rating) {
+        setText('[data-flow="elo"]', rating.current_rating);
+        setText('[data-flow="played"]', rating.matches_count);
+        }
+    } else failures.push(ratings.data.error || "Could not load ratings.");
+
+    if (!verifications.ok) {
+        failures.push(verifications.data.error || "Could not load verification status.");
+        var verificationMessage = document.getElementById("verification-message");
+        if (verificationMessage) {
+          verificationMessage.textContent = failures[failures.length - 1];
+          verificationMessage.dataset.loadError = "true";
+        }
+    } else {
+        var previousError = document.getElementById("verification-message");
+        if (previousError && previousError.dataset.loadError) {
+          previousError.textContent = "";
+          delete previousError.dataset.loadError;
+        }
+        var submissions = verifications.data.submissions || [];
+        var latest = submissions[0];
+        var statusLabels = { pending: "Pending review", approved: "Verified", rejected: "Changes requested" };
+        setText('[data-flow="verify-state"]', latest ? statusLabels[latest.status] || latest.status : "Not submitted");
+        renderVerificationSubmissions(submissions);
+    }
+
+    var errorMessage = failures.join(" ");
+    if (errorMessage && errorMessage !== lastSkillDataError) {
+        window.nexToast("Account data unavailable", errorMessage);
+    }
+    lastSkillDataError = errorMessage;
+    skillRefreshInFlight = false;
+  }
+
+  function renderVerificationSubmissions(submissions) {
+    var empty = document.getElementById("verification-empty");
+    var details = document.getElementById("verification-details");
+    if (!empty || !details) return;
+    empty.hidden = submissions.length > 0;
+    details.hidden = submissions.length === 0;
+    details.innerHTML = submissions.map(function (item) {
+      var status = { pending: "Pending review", approved: "Verified", rejected: "Changes requested" }[item.status] || item.status;
+      var date = item.created_at ? new Date(item.created_at).toLocaleString() : "";
+      return '<article class="list-row"><div><strong>' + escapeHtml(status) + '</strong><small>' +
+        escapeHtml(item.method) + " · " + escapeHtml(item.evidence_count) + " file(s) · " +
+        escapeHtml(date) + (item.decision_note ? "<br>" + escapeHtml(item.decision_note) : "") +
+        "</small></div></article>";
+    }).join("");
+  }
+
+  async function initAssessment() {
+    var select = document.getElementById("assessment-sport");
+    var questions = document.getElementById("assessment-questions");
+    var submit = document.getElementById("assessment-submit");
+    if (!select || !questions || !submit) return;
+
+    var [sports, response] = await Promise.all([
+      loadSports(),
+      apiFetch("/api/questionnaire/questions")
+    ]);
+    select.innerHTML = '<option value="">Select a sport</option>' +
+      sports.map(function (sport) {
+        return '<option value="' + escapeHtml(sport.id) + '">' + escapeHtml(sport.name) + "</option>";
+      }).join("");
+    if (!response.ok) {
+      document.getElementById("assessment-status").textContent =
+        response.data.error || "Could not load assessment questions.";
+      return;
+    }
+    questions.innerHTML = (response.data.questions || []).map(function (question) {
+      return '<label class="field"><span>' + escapeHtml(question.text) + '</span><select class="input" name="' +
+        escapeHtml(question.id) + '" required><option value="">Select an answer</option>' +
+        question.options.map(function (option) {
+          return '<option value="' + escapeHtml(option.value) + '">' + escapeHtml(option.label) + "</option>";
+        }).join("") + "</select></label>";
+    }).join("");
+    submit.disabled = sports.length === 0 || !questions.children.length;
+    select.addEventListener("change", function () {
+      refreshSkillData();
+    });
+    document.getElementById("assessment-status").textContent =
+      "Your progress and seed rating are saved to your account.";
+    await refreshSkillData();
+  }
+
+  async function submitAssessment(form) {
+    var resultBox = document.getElementById("assessment-result");
+    var sportId = form.elements.sport_id.value;
+    if (!sportId) {
+      resultBox.textContent = "Choose a sport before saving your assessment.";
+      form.elements.sport_id.focus();
+      return;
+    }
+    var answerFields = Array.from(form.querySelectorAll("#assessment-questions select"));
+    var answers = {};
+    for (var field of answerFields) {
+      if (!field.value) {
+        field.focus();
+        resultBox.textContent = "Answer every question before saving.";
+        return;
+      }
+      answers[field.name] = Number(field.value);
+    }
+
+    var button = document.getElementById("assessment-submit");
+    resultBox.textContent = "";
+    setBusy(button, true, "Saving assessment...");
+    var result = await apiFetch("/api/questionnaire/submit", {
+      method: "POST",
+      body: JSON.stringify({ sport_id: sportId, answers: answers })
+    });
+    setBusy(button, false);
+    if (!result.ok) {
+      resultBox.textContent = result.data.error || "Could not save your assessment.";
+      return;
+    }
+    resultBox.textContent = result.data.notice + " Seed rating: " + result.data.provisional_rating + ".";
+    await refreshSkillData();
+  }
+
+  async function submitVerification(form) {
+    var resultBox = document.getElementById("verification-message");
+    var button = document.getElementById("verification-submit");
+    var fileInput = form.elements.evidence;
+    var files = Array.from(fileInput.files || []);
+    var allowedTypes = {
+      "image/jpeg": ".jpg",
+      "image/png": ".png",
+      "image/webp": ".webp",
+      "application/pdf": ".pdf"
+    };
+    if (!files.length || files.length > 3) {
+      resultBox.textContent = "Attach between 1 and 3 evidence files.";
+      fileInput.focus();
+      return;
+    }
+    var invalidFile = files.find(function (file) {
+      return !allowedTypes[file.type] || file.size < 1 || file.size > 5 * 1024 * 1024;
+    });
+    if (invalidFile) {
+      resultBox.textContent = "Use JPG, PNG, WEBP, or PDF files no larger than 5 MB each.";
+      fileInput.focus();
+      return;
+    }
+
+    var session = await getSession();
+    if (!session) {
+      resultBox.textContent = "Sign in again before submitting evidence.";
+      return;
+    }
+
+    resultBox.textContent = "";
+    setBusy(button, true, "Uploading evidence...");
+    var uploadedPaths = [];
+    var result;
+    try {
+      for (var file of files) {
+        var path = session.user.id + "/" + crypto.randomUUID() + allowedTypes[file.type];
+        var upload = await supabaseClient.storage.from("skill-evidence").upload(path, file, {
+          contentType: file.type,
+          upsert: false
+        });
+        if (upload.error) throw upload.error;
+        uploadedPaths.push(path);
+      }
+      result = await apiFetch("/api/verification/submit", {
+        method: "POST",
+        body: JSON.stringify({
+          method: form.elements.method.value,
+          note: form.elements.note.value.trim(),
+          evidence_paths: uploadedPaths
+        })
+      });
+    } catch (error) {
+      setBusy(button, false);
+      var detail = error && error.message || "Could not upload evidence.";
+      var cleanupError = await removeUploadedEvidence(uploadedPaths);
+      resultBox.textContent = cleanupError
+        ? detail + " Uploaded files could not be removed: " + cleanupError
+        : detail;
+      return;
+    }
+    setBusy(button, false);
+    if (!result.ok) {
+      resultBox.textContent = result.data.error || "Could not submit evidence.";
+      var cleanupError = await removeUploadedEvidence(uploadedPaths);
+      if (cleanupError) resultBox.textContent += " Uploaded files could not be removed: " + cleanupError;
+      return;
+    }
+    resultBox.textContent = result.data.message;
+    form.reset();
+    await refreshSkillData();
+  }
+
+  async function removeUploadedEvidence(paths) {
+    if (!paths.length) return "";
+    try {
+      var result = await supabaseClient.storage.from("skill-evidence").remove(paths);
+      return result.error ? result.error.message || "Storage cleanup failed." : "";
+    } catch (error) {
+      return error && error.message || "Storage cleanup failed.";
+    }
+  }
+
   async function initDashboard(session) {
     var data = await loadProfile();
     var profile = data && data.profile;
@@ -202,13 +470,7 @@
     if (name && nameNode) nameNode.textContent = "Welcome, " + name;
     markAccountProfile(profile, data && data.user);
 
-    var rating = await apiFetch("/api/ratings/me");
-    if (rating.ok && Array.isArray(rating.data.ratings) && rating.data.ratings.length) {
-      var primary = rating.data.ratings[0];
-      setText('[data-flow="elo"]', primary.current_rating);
-      setText('[data-flow="played"]', primary.matches_count);
-      setText('[data-flow="winrate"]', primary.matches_count ? "\u2014" : "\u2014");
-    }
+    await refreshSkillData();
     var mine = await apiFetch("/api/lobbies/mine");
     if (mine.ok) {
       var open = (mine.data.lobbies || []).find(function (lobby) {
@@ -247,6 +509,7 @@
       }
     });
     markAccountProfile(profile, data.user);
+    await refreshSkillData();
   }
 
   async function submitProfile(form) {
@@ -551,7 +814,17 @@
     if (protectedPages.has(page) && !session) return;
     if (page === "dashboard") await initDashboard(session);
     if (page === "profile" || page === "settings") await initProfile();
+    if (page === "assessment") await initAssessment();
+    if (page === "verify") await refreshSkillData();
     if (page === "create-room") await initRoomForm();
     if (page === "find-match") await initFindMatch(session);
+    if (["dashboard", "profile", "assessment", "verify"].includes(page)) {
+      window.setInterval(function () {
+        if (!document.hidden) refreshSkillData();
+      }, 20000);
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) refreshSkillData();
+      });
+    }
   });
 })();

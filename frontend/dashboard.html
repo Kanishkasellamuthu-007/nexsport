@@ -100,7 +100,11 @@
             <div><h3>Your NexSport workflow</h3><div class="hint">Assessment → verification → seed Elo → match room → balanced teams → result → rating</div></div>
             <a class="btn btn-primary btn-sm" href="create-room.html">Create match room</a>
           </div>
-          <ol class="flow-list" id="flow-pipeline"></ol>
+          <dl class="kv" style="margin-top:16px">
+            <div><dt>Assessment</dt><dd data-flow="assessment-state">Loading…</dd></div>
+            <div><dt>Seed Elo</dt><dd data-flow="seed-elo">—</dd></div>
+            <div><dt>Skill verification</dt><dd data-flow="verify-state">Loading…</dd></div>
+          </dl>
         </section>
         <div class="grid g4">
           <section class="card stat"><div class="k">Matches played</div><div class="v">0</div><div class="n">No matches recorded yet</div></section>

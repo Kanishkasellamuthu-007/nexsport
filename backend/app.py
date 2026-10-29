@@ -36,6 +36,7 @@ def create_app() -> Flask:
     from backend.routes.sports import sports_bp
     from backend.routes.teams import teams_bp
     from backend.routes.chat import chat_bp
+    from backend.routes.verification import verification_bp
 
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
@@ -47,6 +48,7 @@ def create_app() -> Flask:
     app.register_blueprint(ratings_bp)
     app.register_blueprint(teams_bp)
     app.register_blueprint(chat_bp)
+    app.register_blueprint(verification_bp)
 
     frontend_dir = os.path.abspath(os.path.join(app.root_path, "..", "frontend"))
 

@@ -84,7 +84,7 @@
         <div class="page-head">
           <div>
             <h1>MCQ assessment</h1>
-            <p>Answer once. Your responses are converted into a seed Elo rating so your first match is already balanced.</p>
+            <p>Answer the sport-specific questions. Your responses are saved to your account and used to calculate a provisional seed rating.</p>
           </div>
           <div class="head-actions"><a class="btn btn-ghost btn-sm" href="verify.html">Skip to verification</a></div>
         </div>
@@ -94,76 +94,17 @@
               <div class="ico">☑</div>
               <div><h3>One-time MCQ assessment</h3><div class="hint">Experience · fitness · frequency · sports knowledge</div></div>
             </div>
-            <p class="muted" id="assessment-done" hidden>You already completed this assessment. Submitting again re-seeds your rating.</p>
+            <p class="muted" id="assessment-status" role="status" aria-live="polite">Loading your assessment…</p>
             <form id="assessment-form" novalidate>
-          <label class="field">
-            <span>Years of competitive experience</span>
-            <select class="input" name="experience" data-q required>
-              <option value="">Select an answer</option>
-              <option value="0">Never played competitively</option>
-              <option value="1">Under 1 year</option>
-              <option value="2">1–3 years</option>
-              <option value="3">3–6 years</option>
-              <option value="4">6+ years</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Current fitness level</span>
-            <select class="input" name="fitness" data-q required>
-              <option value="">Select an answer</option>
-              <option value="0">Rebuilding from a break</option>
-              <option value="1">Light activity</option>
-              <option value="2">Train weekly</option>
-              <option value="3">Train 3–4x a week</option>
-              <option value="4">Athlete-level conditioning</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>How often do you play this sport?</span>
-            <select class="input" name="frequency" data-q required>
-              <option value="">Select an answer</option>
-              <option value="0">Rarely</option>
-              <option value="1">Once a month</option>
-              <option value="2">Twice a month</option>
-              <option value="3">Weekly</option>
-              <option value="4">Multiple times a week</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Rules and tactical knowledge</span>
-            <select class="input" name="knowledge" data-q required>
-              <option value="">Select an answer</option>
-              <option value="0">Learning the basics</option>
-              <option value="1">Know the core rules</option>
-              <option value="2">Comfortable with tactics</option>
-              <option value="3">Strong tactical reader</option>
-              <option value="4">Coach-level understanding</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Highest level played</span>
-            <select class="input" name="level" data-q required>
-              <option value="">Select an answer</option>
-              <option value="0">Casual pick-up games</option>
-              <option value="1">Local club games</option>
-              <option value="2">District / league level</option>
-              <option value="3">State level</option>
-              <option value="4">National level or above</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Confidence in your primary position</span>
-            <select class="input" name="role" data-q required>
-              <option value="">Select an answer</option>
-              <option value="0">Still finding my position</option>
-              <option value="1">Can fill in anywhere</option>
-              <option value="2">Settled in one position</option>
-              <option value="3">Lead my position</option>
-              <option value="4">Captain / playmaker</option>
-            </select>
-          </label>
-              <button class="btn btn-primary btn-block" type="submit" style="margin-top:18px">Score assessment &amp; generate seed Elo</button>
+              <label class="field"><span>Sport</span>
+                <select class="input" id="assessment-sport" name="sport_id" required>
+                  <option value="">Loading sports…</option>
+                </select>
+              </label>
+              <div id="assessment-questions" aria-live="polite"></div>
+              <button class="btn btn-primary btn-block" id="assessment-submit" type="submit" style="margin-top:18px" disabled>Save assessment</button>
             </form>
+            <div id="assessment-result" class="flow-error" role="status" aria-live="polite"></div>
           </section>
           <section class="card">
             <div class="card-head">
@@ -172,8 +113,8 @@
             </div>
             <ul class="bullets">
               <li>Your answers are converted into a <strong>seed Elo rating</strong> so your very first match is already balanced.</li>
-              <li>The assessment is scored once. Every match after that moves your rating dynamically.</li>
-              <li>Answers stay on this device — nothing is sent anywhere in this front-end build.</li>
+              <li>Your assessment is saved to your account. Retakes are recorded, but do not replace your original seed rating.</li>
+              <li>Verified match results update your rating after the assessment.</li>
             </ul>
             <dl class="kv" style="margin-top:16px">
               <div><dt>Assessment</dt><dd data-flow="assessment-state">Not started</dd></div>

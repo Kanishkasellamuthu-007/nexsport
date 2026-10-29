@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Skill verification | NexSport</title>
-  <meta name="description" content="Submit match results, images or certificates so NexSport can verify your skill level and activate your rating." />
+  <meta name="description" content="Submit private evidence for skill verification review and track your submission status." />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Skill verification | NexSport" />
-  <meta property="og:description" content="Submit match results, images or certificates so NexSport can verify your skill level and activate your rating." />
+  <meta property="og:description" content="Submit private evidence for skill verification review and track your submission status." />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -83,8 +83,8 @@
       <main class="content">
         <div class="page-head">
           <div>
-            <h1>AI skill verification</h1>
-            <p>Upload evidence of how you play. Verification activates your seed rating and unlocks match rooms.</p>
+            <h1>Skill verification</h1>
+            <p>Submit evidence for review. Your submission and its status are saved to your account; uploading evidence does not automatically verify your skill.</p>
           </div>
           <div class="head-actions"><a class="btn btn-ghost btn-sm" href="assessment.html">Back to assessment</a></div>
         </div>
@@ -106,31 +106,34 @@
                 </select>
               </label>
               <label class="field">
-                <span>Attach evidence <span class="muted">(stays on your device)</span></span>
-                <input class="input" type="file" name="evidence" accept="image/*,.pdf" multiple />
+                <span>Attach evidence <span class="muted">(up to 3 images or PDFs, 5 MB each)</span></span>
+                <input class="input" type="file" name="evidence" accept="image/jpeg,image/png,image/webp,application/pdf" multiple required />
               </label>
               <label class="field">
                 <span>Context for the reviewer</span>
                 <textarea class="input" name="note" rows="4" placeholder="Where you played, which league, notable results…"></textarea>
               </label>
-              <button class="btn btn-primary btn-block" type="submit" style="margin-top:6px">Submit for verification</button>
+              <button class="btn btn-primary btn-block" id="verification-submit" type="submit" style="margin-top:6px">Submit for review</button>
             </form>
+            <div id="verification-message" class="flow-error" role="status" aria-live="polite"></div>
           </section>
           <section class="card">
             <div class="card-head">
               <div class="ico">↗</div>
-              <div><h3>Rating status</h3><div class="hint">Seed rating becomes live after verification</div></div>
+              <div><h3>Rating status</h3><div class="hint">Your saved ratings and latest review status</div></div>
             </div>
             <dl class="kv">
+              <div><dt>Assessment</dt><dd data-flow="assessment-state">Loading…</dd></div>
               <div><dt>Seed Elo</dt><dd data-flow="seed-elo">—</dd></div>
-              <div><dt>Verification</dt><dd data-flow="verify-state">Pending</dd></div>
+              <div><dt>Verification</dt><dd data-flow="verify-state">Not submitted</dd></div>
               <div><dt>Active rating</dt><dd data-flow="elo">—</dd></div>
             </dl>
-            <div class="empty" style="margin-top:16px">
+            <div class="empty" id="verification-empty" style="margin-top:16px">
               <div class="glyph">Ⓐ</div>
-              <h4>Nothing uploaded yet</h4>
-              <p>Verification unlocks match rooms and puts your seed rating into the matchmaking pool.</p>
+              <h4>No evidence submitted</h4>
+              <p>Submit supporting evidence to create a review request. Your rating remains provisional until verification is reviewed.</p>
             </div>
+            <div id="verification-details" class="stack" hidden></div>
           </section>
         </div>
       </main>

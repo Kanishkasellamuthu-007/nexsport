@@ -97,10 +97,17 @@
             <form id="room-form" novalidate>
               <div class="grid g2">
                 <label class="field"><span>Sport</span>
-                  <select class="input" name="sport" required>
-                    <option value="">Select a sport</option>
-                    <option>Football</option><option>Cricket</option><option>Basketball</option>
-                    <option>Badminton</option><option>Volleyball</option><option>Tennis</option>
+                  <select class="select" name="sport" required>
+                    <option value="" disabled selected>Select a sport</option>
+                    <option value="Football">Football</option>
+                    <option value="Cricket">Cricket</option>
+                    <option value="Basketball">Basketball</option>
+                    <option value="Badminton">Badminton</option>
+                    <option value="Volleyball">Volleyball</option>
+                    <option value="Tennis">Tennis</option>
+                    <option value="Table Tennis">Table Tennis</option>
+                    <option value="Swimming">Swimming</option>
+                    <option value="Running">Running</option>
                   </select>
                 </label>
                 <label class="field"><span>Ground / venue</span><input class="input" name="ground" placeholder="Name of the ground" required /></label>
@@ -108,9 +115,12 @@
                 <label class="field"><span>Start time</span><input class="input" type="time" name="time" required /></label>
                 <label class="field"><span>Players required</span><input class="input" type="number" name="players" min="2" max="30" step="1" placeholder="e.g. 10" required /></label>
                 <label class="field"><span>Skill level</span>
-                  <select class="input" name="skill" required>
-                    <option value="">Select a level</option>
-                    <option>Open to all</option><option>Developing</option><option>Intermediate</option><option>Advanced</option>
+                  <select class="select" name="skill" required>
+                    <option value="" disabled selected>Select a level</option>
+                    <option value="Open to all">Open to all</option>
+                    <option value="Developing">Developing</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
                   </select>
                 </label>
                 <label class="field"><span>Latitude</span><input class="input" name="lat" type="number" min="-90" max="90" step="any" placeholder="Required" required /></label>

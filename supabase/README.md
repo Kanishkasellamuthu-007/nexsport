@@ -10,12 +10,13 @@ Supabase SQL Editor:
 5. `005_lobby_functions.sql` — atomic join/leave RPCs and status trigger
 6. `006_match_ratings.sql` — atomic post-match Elo application RPC
 7. `007_team_assignment_authorization.sql` — host-only team assignment RPC and RLS policy
+8. `008_skill_verification.sql` — private evidence storage and review submissions
 
 ## How to run
 
 1. Open your project at [supabase.com](https://supabase.com) → **SQL Editor** → *New query*.
 2. Paste the **entire contents** of `001_initial_schema.sql` → **Run**.
-3. Repeat migrations `002` through `007` in numeric order. Do not skip `007`
+3. Repeat migrations `002` through `008` in numeric order. Do not skip `007`
    when upgrading an existing project: it replaces the broad participant update policy.
 4. No credentials are needed in the SQL editor — you are already authenticated
    as the project owner (service role). The browser/website never sees these;
@@ -39,6 +40,7 @@ Supabase SQL Editor:
 | `match_results` | Authoritative final score per match. | **unique (match_id)** + `idempotency_key` unique → no duplicate processing; `ratings_applied` flag |
 | `player_ratings` | Current authoritative Elo per (user, sport) + peak. | unique (user_id, sport_id); **no user write policies** |
 | `rating_history` | Append-only Elo ledger (before/after/delta/reason). | unique (user, sport, match, reason) |
+| `skill_verification_submissions` | Evidence submission metadata and review status. | evidence is stored in a private bucket; only the backend can submit or change review status |
 | `peer_feedback` | Post-match 1–5 ratings between players. | unique (match, reviewer, reviewee); can't review self |
 | `match_statistics` | Per-player stats; `custom_stats` jsonb for sport-specific metrics. | unique (match_id, user_id) |
 

@@ -174,6 +174,71 @@ class TestStatisticsAuthorization(unittest.TestCase):
         self.assertEqual(self.admin.upserts[0][1]["team_side"], "team_a")
 
 
+class TestAssessmentAndVerificationAuthorization(unittest.TestCase):
+    def setUp(self):
+        self.app = make_app()
+        self.client = self.app.test_client()
+
+    def test_assessment_status_requires_authentication(self):
+        with patch(
+            "backend.routes.questionnaire.verify_request_user",
+            side_effect=AuthError("Missing Authorization header"),
+        ):
+            response = self.client.get("/api/questionnaire/me")
+        self.assertEqual(response.status_code, 401)
+
+    def test_verification_status_and_submission_require_authentication(self):
+        with patch(
+            "backend.routes.verification.verify_request_user",
+            side_effect=AuthError("Missing Authorization header"),
+        ):
+            status = self.client.get("/api/verification/me")
+            submission = self.client.post(
+                "/api/verification/submit",
+                data={"method": "images"},
+                content_type="multipart/form-data",
+            )
+        self.assertEqual(status.status_code, 401)
+        self.assertEqual(submission.status_code, 401)
+
+    def test_verification_rejects_missing_or_invalid_evidence_paths(self):
+        with patch(
+            "backend.routes.verification.verify_request_user",
+            return_value={"sub": "player"},
+        ):
+            missing = self.client.post(
+                "/api/verification/submit",
+                json={"method": "images", "evidence_paths": []},
+            )
+            other_users_file = self.client.post(
+                "/api/verification/submit",
+                json={
+                    "method": "images",
+                    "evidence_paths": ["another-user/123e4567-e89b-12d3-a456-426614174000.jpg"],
+                },
+            )
+            invalid_type = self.client.post(
+                "/api/verification/submit",
+                json={
+                    "method": "images",
+                    "evidence_paths": ["player/123e4567-e89b-12d3-a456-426614174000.exe"],
+                },
+            )
+        self.assertEqual(missing.status_code, 400)
+        self.assertEqual(other_users_file.status_code, 400)
+        self.assertEqual(invalid_type.status_code, 400)
+
+    def test_verification_migration_keeps_evidence_private(self):
+        migration = (
+            Path(__file__).parents[1]
+            / "supabase/migrations/008_skill_verification.sql"
+        ).read_text(encoding="utf-8")
+        self.assertIn("'skill-evidence',", migration)
+        self.assertIn("false,", migration)
+        self.assertIn("verification_submissions_select_own", migration)
+        self.assertIn("storage.foldername(name)", migration)
+
+
 class TestTeamAuthorizationAndPersistence(unittest.TestCase):
     def setUp(self):
         self.app = make_app()
