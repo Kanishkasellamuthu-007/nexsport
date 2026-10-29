@@ -42,12 +42,17 @@
   async function apiFetch(path, options) {
     var isFormData = options && options.body instanceof FormData;
     var session = await getSession();
+    var demoToken = localStorage.getItem("nexsport_demo_token");
     var headers = Object.assign(
       { "Content-Type": "application/json" },
       (options && options.headers) || {}
     );
     if (isFormData) delete headers["Content-Type"];
-    if (session) headers.Authorization = "Bearer " + session.access_token;
+    if (session) {
+      headers.Authorization = "Bearer " + session.access_token;
+    } else if (demoToken) {
+      headers.Authorization = "Bearer " + demoToken;
+    }
     var response = await fetch(CONFIG.API_BASE_URL + path, Object.assign({}, options || {}, { headers: headers }));
     var data = await response.json().catch(function () { return {}; });
     return { ok: response.ok, status: response.status, data: data };
@@ -79,20 +84,37 @@
     location.replace("index.html?redirect=" + target);
   }
 
+  function getDemoSession() {
+    var token = localStorage.getItem("nexsport_demo_token");
+    if (!token) return null;
+    var email = localStorage.getItem("nexsport_demo_email") || "demo@nexsport.app";
+    var name = localStorage.getItem("nexsport_demo_name") || "Demo User";
+    return {
+      access_token: token,
+      user: {
+        id: "usr_demo_kanishka_77",
+        email: email,
+        user_metadata: { full_name: name },
+      },
+    };
+  }
+
   async function initAuth() {
     var session = await getSession();
-    document.body.classList.toggle("is-signed-out", !session);
-    if (protectedPages.has(page) && !session) {
+    var demoSession = getDemoSession();
+    var hasAuth = session || demoSession;
+    document.body.classList.toggle("is-signed-out", !hasAuth);
+    if (protectedPages.has(page) && !hasAuth) {
       redirectToLogin();
       return null;
     }
-    if (session) markSignedIn(session);
-    if ((page === "login" || page === "register") && session) {
+    if (hasAuth) markSignedIn(session || demoSession);
+    if ((page === "login" || page === "register") && hasAuth) {
       var redirect = getSafeAuthRedirect(new URLSearchParams(location.search).get("redirect"));
       location.replace(redirect || "dashboard.html");
-      return session;
+      return session || demoSession;
     }
-    return session;
+    return session || demoSession;
   }
 
   document.addEventListener("submit", function (event) {
@@ -128,10 +150,25 @@
   }, true);
 
   document.addEventListener("click", function (event) {
+    var demoBtn = event.target.closest && event.target.closest("#one-click-demo-btn");
+    if (demoBtn) {
+      event.preventDefault();
+      var form = document.getElementById("login-form");
+      if (form) {
+        if (form.elements.email) form.elements.email.value = "kanishkasellamuthu.ss3@gmail.com";
+        if (form.elements.password) form.elements.password.value = "nexsport@123";
+        submitLogin(form);
+      }
+      return;
+    }
+
     var target = event.target.closest && event.target.closest("#sign-out");
     if (!target) return;
     event.preventDefault();
     event.stopImmediatePropagation();
+    localStorage.removeItem("nexsport_demo_token");
+    localStorage.removeItem("nexsport_demo_email");
+    localStorage.removeItem("nexsport_demo_name");
     supabaseClient.auth.signOut().finally(function () {
       sessionStorage.removeItem(AUTH_SESSION_KEY);
       location.replace("index.html");
@@ -144,6 +181,47 @@
     var password = form.elements.password.value;
     var button = form.querySelector('[type="submit"]');
     setBusy(button, true, "Signing in...");
+
+    // Try demo login first
+    try {
+      var demoRes = await fetch(CONFIG.API_BASE_URL + "/api/auth/demo-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+      if (demoRes.ok) {
+        var demoData = await demoRes.json();
+        localStorage.setItem("nexsport_demo_token", demoData.access_token);
+        localStorage.setItem("nexsport_demo_email", demoData.user.email);
+        localStorage.setItem("nexsport_demo_name", (demoData.user.user_metadata || {}).full_name || email.split("@")[0]);
+        markSignedIn({
+          access_token: demoData.access_token,
+          user: demoData.user,
+        });
+        setBusy(button, false);
+        var redirect = getSafeAuthRedirect(new URLSearchParams(location.search).get("redirect"));
+        location.replace(redirect || "dashboard.html");
+        return;
+      }
+    } catch (e) {
+      console.warn("Demo login endpoint unavailable, trying Supabase:", e);
+    }
+
+    // Fallback to Supabase auth
+    // If offline / demo user credentials entered
+    if (email.toLowerCase() === 'kanishkasellamuthu.ss3@gmail.com' && password === 'nexsport@123') {
+      localStorage.setItem('nexsport_demo_token', 'demo-token');
+      localStorage.setItem('nexsport_demo_email', email);
+      localStorage.setItem('nexsport_demo_name', 'Kanishka Sellamuthu');
+      markSignedIn({
+        access_token: 'demo-token',
+        user: { id: 'usr_demo_kanishka_77', email: email, user_metadata: { full_name: 'Kanishka Sellamuthu' } }
+      });
+      setBusy(button, false);
+      var redirect = getSafeAuthRedirect(new URLSearchParams(location.search).get('redirect'));
+      location.replace(redirect || 'dashboard.html');
+      return;
+    }
     var result = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
     setBusy(button, false);
     if (result.error) {

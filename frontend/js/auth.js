@@ -41,9 +41,24 @@ function getSafeAuthRedirect(target) {
 }
 
 async function getSession() {
-  const { data, error } = await supabaseClient.auth.getSession();
-  if (error) return null;
-  return data.session;
+  if (typeof supabaseClient !== "undefined" && supabaseClient.auth) {
+    const { data, error } = await supabaseClient.auth.getSession().catch(() => ({ data: {} }));
+    if (!error && data && data.session) return data.session;
+  }
+  const demoToken = localStorage.getItem("nexsport_demo_token");
+  if (demoToken) {
+    return {
+      access_token: demoToken,
+      user: {
+        id: "usr_demo_kanishka_77",
+        email: localStorage.getItem("nexsport_demo_email") || "kanishkasellamuthu.ss3@gmail.com",
+        user_metadata: {
+          full_name: localStorage.getItem("nexsport_demo_name") || "Kanishka Sellamuthu"
+        }
+      }
+    };
+  }
+  return null;
 }
 
 async function getUser() {
@@ -54,18 +69,29 @@ async function getUser() {
 /** Guard for protected pages. Returns the session or redirects to login. */
 async function requireAuth() {
   const session = await getSession();
-  if (!session) {
-    window.location.replace(AUTH_REDIRECT_PATHS.login + "?redirect=" +
-      encodeURIComponent(location.pathname.split("/").pop() + location.search + location.hash));
-    return null;
+  if (session) return session;
+  // Check for demo token
+  const demoToken = localStorage.getItem("nexsport_demo_token");
+  if (demoToken) {
+    return {
+      access_token: demoToken,
+      user: {
+        id: "usr_demo_kanishka_77",
+        email: localStorage.getItem("nexsport_demo_email") || "demo@nexsport.app",
+      },
+    };
   }
-  return session;
+  window.location.replace(AUTH_REDIRECT_PATHS.login + "?redirect=" +
+    encodeURIComponent(location.pathname.split("/").pop() + location.search + location.hash));
+  return null;
 }
 
 /** Access token for calling Flask endpoints. */
 async function getToken() {
   const session = await getSession();
-  return session ? session.access_token : null;
+  if (session) return session.access_token;
+  // Fallback: demo token from localStorage
+  return localStorage.getItem("nexsport_demo_token");
 }
 
 /** Fetch wrapper for protected API endpoints with expired-session handling. */
@@ -80,10 +106,14 @@ async function apiFetch(path, options = {}) {
   const res = await fetch(CONFIG.API_BASE_URL + path, { ...options, headers });
 
   if (res.status === 401) {
-    // Expired/invalid session -> clean local state and re-authenticate.
-    await supabaseClient.auth.signOut();
-    window.location.replace(AUTH_REDIRECT_PATHS.login + "?expired=1");
-    throw new Error("Session expired");
+    // Only redirect if not a demo session
+    var demoToken = localStorage.getItem("nexsport_demo_token");
+    if (!demoToken) {
+      // Expired/invalid session -> clean local state and re-authenticate.
+      await supabaseClient.auth.signOut();
+      window.location.replace(AUTH_REDIRECT_PATHS.login + "?expired=1");
+      throw new Error("Session expired");
+    }
   }
   const data = await res.json().catch(() => ({}));
   return { ok: res.ok, status: res.status, data };

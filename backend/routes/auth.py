@@ -9,12 +9,46 @@ from flask import Blueprint, jsonify, request
 from backend.config import config
 from backend.services.auth_service import (
     AuthError,
+    DEMO_USER_ID,
+    DEMO_EMAIL,
     create_profile_for_user,
     fetch_profile,
     verify_request_user,
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
+
+# ── Demo credentials (local / dev only) ──────────────────────────
+DEMO_PASSWORD = "nexsport@123"
+
+
+@auth_bp.post("/demo-login")
+def demo_login():
+    """Dev-only endpoint: returns a demo token when demo credentials match.
+
+    Body: { "email": "...", "password": "..." }
+    Returns: { "access_token": "demo-token", "user": { ... }, "profile": { ... } }
+    """
+    body = request.get_json(silent=True) or {}
+    email = str(body.get("email", "")).strip().lower()
+    password = str(body.get("password", ""))
+
+    if email != DEMO_EMAIL.lower() or password != DEMO_PASSWORD:
+        return jsonify({"error": "Invalid demo credentials"}), 401
+
+    profile = fetch_profile(DEMO_USER_ID)
+    return jsonify({
+        "access_token": "demo-token",
+        "token_type": "bearer",
+        "expires_in": 86400,
+        "user": {
+            "id": DEMO_USER_ID,
+            "email": DEMO_EMAIL,
+            "app_metadata": {"provider": "email"},
+            "user_metadata": {"full_name": "Kanishka Sellamuthu"},
+        },
+        "profile": profile,
+    }), 200
 
 
 @auth_bp.get("/me")
